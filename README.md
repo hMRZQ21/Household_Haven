@@ -4,6 +4,7 @@ Household Haven: An Online Marketplace for Second-hand Household Goods. Develope
 ### our proposal goes here...
 
 Anthony Zhu
+
 Konrad Zielinski
 
 #### our mockups also go here
