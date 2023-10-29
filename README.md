@@ -39,4 +39,9 @@
 5. Ebay API
 
 # ER Diagram:
-![Screenshot of ER Diagram made with LucidChart.](https://myoctocat.com/assets/images/base-octocat.svg)
+<p align="center">
+  <alt>Screenshot of ER Diagram made with LucidChart.</alt>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/ER%20Diagram.png"/>
+</p>
+<!-- ![Screenshot of ER Diagram made with LucidChart.](https://github.com/hMRZQ21/Household_Haven/blob/main/ER%20Diagram.png)
+ -->
