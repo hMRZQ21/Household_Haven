@@ -43,5 +43,14 @@
   <alt>Screenshot of ER Diagram made with LucidChart.</alt>
   <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/ER%20Diagram.png"/>
 </p>
-<!-- ![Screenshot of ER Diagram made with LucidChart.](https://github.com/hMRZQ21/Household_Haven/blob/main/ER%20Diagram.png)
- -->
+
+# Mockups:
+<p align="center">
+  <alt>Screenshot of shopping cart mockup made with Figma.</alt>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/Mockup%20cart.png"/>
+</p>
+
+<p align="center">
+  <alt>Screenshot of item view mockup made with Figma.</alt>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/mockup%20item.png"/>
+</p>
