@@ -1,4 +1,9 @@
 # Team Name: Household Haven
+# Logo:
+<p align="center">
+  <img width="200" height="200" src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Logo.png"/>
+</p>
+
 # Team Members: 
 1. Anthony Zhu
 2. Hussam Marzooq
@@ -41,16 +46,16 @@
 # ER Diagram:
 <p align="center">
   <alt>Screenshot of ER Diagram made with LucidChart.</alt>
-  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/ER%20Diagram.png"/>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/ER%20Diagram.png"/>
 </p>
 
 # Mockups:
 <p align="center">
   <alt>Screenshot of shopping cart mockup made with Figma.</alt>
-  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/Mockup%20cart.png"/>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Mockup%20cart.png"/>
 </p>
 
 <p align="center">
   <alt>Screenshot of item view mockup made with Figma.</alt>
-  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/mockup%20item.png"/>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Mockup%20item%20view.png"/>
 </p>
