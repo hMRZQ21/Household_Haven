@@ -1,4 +1,7 @@
 # Team Name: Household Haven
+
+<span style="color:red">!!! PLEASE push any changes to a new branch and do a merge request</span>
+
 # Logo:
 <p align="center">
   <img width="200" height="200" src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Logo.png"/>
