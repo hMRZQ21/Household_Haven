@@ -1,6 +1,6 @@
-# Team Name: Household Haven
+$${\huge{\textsf{\color{red}!!! PLEASE push any changes to a new branch and do a merge request}}}$$
 
-<span style="color:red">!!! PLEASE push any changes to a new branch and do a merge request</span>
+# Team Name: Household Haven
 
 # Logo:
 <p align="center">
