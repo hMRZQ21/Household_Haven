@@ -1,0 +1,15 @@
+Instructions to get started: (will finish later)
+
+We will be using python 3.x.x
+
+1. Setup your virtual env
+python3 -m venv env
+
+2. Activate virtual env
+./env/scripts/Activate # command might vary
+
+3. Install required dependencies
+pip install -r ./requirements.txt
+
+4. Run the server
+python3 ./main.py

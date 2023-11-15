@@ -4,7 +4,7 @@ $${\huge{\textsf{\color{red}!!! PLEASE push any changes to a new branch and do a
 
 # Logo:
 <p align="center">
-  <img width="200" height="200" src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Logo.png"/>
+  <img width="200" height="200" src="https://github.com/hMRZQ21/Household_Haven/blob/main/templates/assets/Logo.png"/>
 </p>
 
 # Team Members: 
@@ -49,16 +49,16 @@ $${\huge{\textsf{\color{red}!!! PLEASE push any changes to a new branch and do a
 # ER Diagram:
 <p align="center">
   <alt>Screenshot of ER Diagram made with LucidChart.</alt>
-  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/ER%20Diagram.png"/>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/templates/assets/ER%20Diagram.png"/>
 </p>
 
 # Mockups:
 <p align="center">
   <alt>Screenshot of shopping cart mockup made with Figma.</alt>
-  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Mockup%20cart.png"/>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/templates/assets/Mockup%20cart.png"/>
 </p>
 
 <p align="center">
   <alt>Screenshot of item view mockup made with Figma.</alt>
-  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/imgs/Mockup%20item%20view.png"/>
+  <img src="https://github.com/hMRZQ21/Household_Haven/blob/main/templates/assets/Mockup%20item%20view.png"/>
 </p>
