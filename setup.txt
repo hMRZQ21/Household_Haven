@@ -1,15 +1,31 @@
-Instructions to get started: (will finish later)
+Instructions to get started:
 
 We will be using python 3.x.x
 
-1. Setup your virtual env
-python3 -m venv env
+0. create .env file for db connection like such:
+    DB_USERNAME=postgres
+    DB_PASSWORD=123
+    DB_HOST=localhost
+    DB_NAME=postgres
 
-2. Activate virtual env
-./env/scripts/Activate # command might vary
+1. install virtualenv
+    pip3 install virtualenv
 
-3. Install required dependencies
-pip install -r ./requirements.txt
+2. create virtualenv in the working directory:
+    "python3 -m venv HHH"
+
+2. Activate virtual env:
+    Windows: "HHH\Scripts\activate"
+    Mac: "source venv/bin/activate"
+
+3. Install required dependencies:
+    "pip3 install -r ./requirements.txt"
+
+4. check environment dependencies:
+    "pip list"
 
 4. Run the server
-python3 ./main.py
+    "python3 ./app.py" or "flask run"
+
+5. To deactivate the venv:
+    "deactivate"

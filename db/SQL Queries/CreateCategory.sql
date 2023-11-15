@@ -13,6 +13,4 @@ INSERT INTO "category" values (0, 0, 'chairs', 'something to sit on');
 INSERT INTO "category" values (1, 0, 'stools', 'a chair with no backrest');
 INSERT INTO "category" values (2, 2, 'table', 'somewhere to place goods');
 
-
-
 select * from "category";

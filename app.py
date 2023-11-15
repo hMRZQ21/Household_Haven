@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 import os
 from dbModels import db, user
 
-
 # Load environment variables from .env file
 load_dotenv()
 
