@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <title>Data Display</title>
+</head>
+<body>
+    <h1>Data from PostgreSQL</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                {% for column in columns %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+                <tr>
+                    <td>{{ row.userID }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.email }}</td>
+                    <td>{{ row.password }}</td>
+                    <td>{{ row.address }}</td>
+                    <td>{{ row.city }}</td>
+                    <td>{{ row.state }}</td>
+                    <td>{{ row.zipcode }}</td>
+                    <td>{{ row.usertype }}</td>
+                    
+                    <!-- Add more columns as needed -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
