@@ -1,0 +1,1 @@
+use pipreqs to find out libaries and version numbers
