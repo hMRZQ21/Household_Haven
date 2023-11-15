@@ -10,10 +10,7 @@ CREATE table if not exists "product" (
 	Primary Key ("productID"),
 	Foreign Key ("sellerID") References "user" ("userID") ON update CASCADE);
 	
-	
 Insert into "product" values (0,0,'ur mom', 'big chungus', 69.69, 420);
 Insert into "product" values (1,0,'ur dad', 'smol chungus', 12.12, 69);
-
-
 
 select * from "product"

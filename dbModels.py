@@ -21,4 +21,6 @@ class user(db.Model, UserMixin):
     zipcode = db.Column(db.Integer, nullable=False)
     usertype = db.Column(db.Integer, nullable=False, default=0)
 
+# class Cart(db.Model)
+
 

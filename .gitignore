@@ -1,3 +1,5 @@
 .env
 **HHH
 **__pycache__
+.DS_Store
+HHH
