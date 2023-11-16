@@ -17,6 +17,8 @@ db = SQLAlchemy()
 ##
 
 class user(db.Model, UserMixin):
+    __tablename__ = "user"
+
     userID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False)
@@ -28,53 +30,69 @@ class user(db.Model, UserMixin):
     usertype = db.Column(db.Integer, nullable=False, default=0)
 
 class product(db.Model, UserMixin):
+    __tablename__ = 'product'
+
     productID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    sellerID = db.relationship("user", backref="product")
+    sellerID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
     itemName = db.Column(db.String(100), nullable=False)
     itemDesc = db.Column(db.String(300))
     price = db.Column(db.Float(6,2), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
 
 class review(db.Model, UserMixin):
+    __tablename__ = 'review'
+
     reviewID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    userID = db.relationship("user", backref="review")
-    productID = db.relationship("product", backref="review")
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
+    date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     rating = db.Column(db.Float(2,1), nullable=False)
     comment = db.Column(db.String(250))
 
 class category(db.Model):
+    __tablename__ = 'category'
+
     categoryID = db.Column(db.Integer, primary_key=True)
-    parentCategoryID = db.relationship("categoryID", backref="category")
+    parentCategoryID = db.Column(db.Integer, db.ForeignKey('category.categoryID'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     desc = db.Column(db.String(300))
 
-class order(db.Model, UserMixin): 
-    orderID = db.Column(db.Integer, nullable=False)
-    userID = db.relationship("user", backref="order")
-    orderDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+class order(db.Model, UserMixin):
+    __tablename__ = 'order'
+
+    orderID = db.Column(db.Integer, primary_key=True, nullable=False)
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    orderDate = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     status = db.Column(db.String(15))
     totalAmount = db.Column(db.Float(6,2))
 
 class orderItem(db.Model, UserMixin):
+    __tablename__ = 'orderItem'
+
     orderItemID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    orderID = db.relationship("order", backref="orderItem")
-    productID = db.relationship("product", backref="orderItem")
+    orderID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
 class cart(db.Model, UserMixin):
+    __tablename__ = 'cart'
+
     cartID = db.Column(db.Integer, primary_key=True, autoincrement=False)
-    userID = db.relationship("user", backref="cart")
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
 
 class cartItems(db.Model, UserMixin):
+    __tablename__ = 'cartItems'
+
     cartItemID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    cartID = db.relationship("cart", backref="cartItems")
-    productID = db.relationship("product", backref="cartItems")
+    cartID = db.Column(db.Integer, db.ForeignKey('cart.cartID'), nullable=False)
+    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
 class payment(db.Model, UserMixin):
+    __tablename__ = 'payment'
+    
     transactionID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    orderID = db.relationship("order", backref="payment")
+    orderID = db.Column(db.Integer, db.ForeignKey('order.orderID'), nullable=False)
     paymentMethod = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Float(6,2), nullable=False)
     status = db.Column(db.String(100), nullable=False)
