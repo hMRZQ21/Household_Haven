@@ -13,8 +13,6 @@ Create table if not exists "user" (
 	PRIMARY KEY ("userID")
 );
 
-
-
 INSERT INTO "user" VALUES (0, '"HI"', '"SOething"', '"123"', '"12345"', '"sad"', 'ny', 10001, 0);
 INSERT INTO "user" VALUES (1, '"bye"', '"SOething"', '"123"', '"12345"', '"sad"', 'ny', 10001, 0);
 
