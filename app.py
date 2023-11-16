@@ -6,7 +6,7 @@ from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
-from dbModels import db, user as u
+from dbModels import db, user
 
 # Load environment variables from .env file
 load_dotenv()
@@ -32,24 +32,21 @@ app.config['SECRET_KEY'] = 'secretkey'
 
 db.init_app(app)
 
-# Check if the connection is successful
-try:
-    with app.app_context():
-        db.engine.connect()
+try: # Check if the connection is successful
+    with app.app_context(): db.engine.connect()
     print("Connected to the database successfully!")
 except Exception as e:
     print(f"Failed to connect to the database. Error: {e}")
 
 @app.route('/')
 def index():
-    return 'Hello, welcome to ur mom!'
+    return 'Hello, welcome to Household Haven!'
 
 @app.route('/home', methods = ['GET', 'POST'])
 def home():
-
     # Rough format for adding rows to our database
 
-    # a = u(userID = None, 
+    # a = user(userID = None, 
     #       name = "hello", 
     #       email = "something?", 
     #       password = "help", 
@@ -64,16 +61,41 @@ def home():
     # db.session.commit()
 
     # Rough format for deleting rows from database based off of primary key value
-
-    # b = u.query.get(3)
+    # b = user.query.get(3)
     # db.session.delete(b)
     # db.session.commit()
 
     with app.app_context():
-        data = u.query.all()
-        columns = u.__table__.columns.keys()
+        data = user.query.all()
+        columns = user.__table__.columns.keys()
     print(data) # Might not work
     return render_template('index.html', data=data,columns=columns)
 
-if __name__ == '__main__':
+@app.route('/register', methods = ['POST'])
+def register():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        password = request.form['password']
+        street = request.form['street']
+        city = request.form['city']
+        state = request.form['state']
+        zipcode = request.form['zipcode']
+    
+        a = user(userID = None, 
+            name=name,
+            email=email,
+            password=password,
+            street=street,
+            city=city,
+            state=state,
+            zipcode=zipcode
+        )
+        db.session.add(a)
+        db.session.commit()
+        # return redirect(url_for('registration_success'))  # Redirect to a success page or another route after adding user
+    # If it's a GET request, render the registration form
+    return render_template('register.html')
+
+if __name__ == '__main__': 
     app.run(debug=True)
