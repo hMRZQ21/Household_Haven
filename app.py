@@ -7,7 +7,6 @@ from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
 from dbModels import db, user
-import forms as f
 
 
 # Load environment variables from .env file
