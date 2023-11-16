@@ -29,6 +29,14 @@
         <input type="text" id="zipcode" name="zipcode" required><br><br>
 
         <input type="submit" Submit>
+
+        {%if (valid_creds == False)%} 
+    
+
+            <div class = "alert alert-warning" role="alert">
+              {{alert_user}}
+            </div>
+        {%endif%}
     </form>
 </body>
 </html>

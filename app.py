@@ -84,6 +84,8 @@ def home():
 
 @app.route('/register', methods = ['GET','POST'])
 def register():
+    valid_creds = True
+    
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
@@ -110,8 +112,10 @@ def register():
             db.session.commit()
             return redirect(url_for('home'))
         else:
+            valid_creds = False
+            alert_user = "An account with this email already exists!"
             print("An account with this email already exists!")
-            return redirect(url_for('register'))
+            return render_template('register.html', alert_user=alert_user, valid_creds=valid_creds)
         # return redirect(url_for('registration_success'))  # Redirect to a success page or another route after adding user
     # If it's a GET request, render the registration form
     return render_template('register.html')
