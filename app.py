@@ -7,6 +7,8 @@ from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
 from dbModels import db, user
+import forms as f
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -31,6 +33,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'secretkey'
 
 db.init_app(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+@login_manager.user_loader
+def load_user(id):
+    if user.query.get((int(id))):
+        return user.query.get(int(id))
+    
 
 try: # Check if the connection is successful
     with app.app_context(): db.engine.connect()
@@ -68,31 +80,39 @@ def home():
     with app.app_context():
         data = user.query.all()
         columns = user.__table__.columns.keys()
-    print(data) # Might not work
+    # print(data) # Might not work
     return render_template('index.html', data=data,columns=columns)
 
-@app.route('/register', methods = ['POST'])
+@app.route('/register', methods = ['GET','POST'])
 def register():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        password = request.form['password']
-        street = request.form['street']
-        city = request.form['city']
-        state = request.form['state']
-        zipcode = request.form['zipcode']
+        name = request.form.get('name')
+        email = request.form.get('email')
+        password = request.form.get('password')
+        street = request.form.get('street')
+        city = request.form.get('city')
+        state = request.form.get('state')
+        zipcode = request.form.get("zipcode")
+        
+        exists = user.query.filter_by(email=email).first()
+        print(exists)
+        if not exists:
     
-        a = user(userID = None, 
-            name=name,
-            email=email,
-            password=password,
-            street=street,
-            city=city,
-            state=state,
-            zipcode=zipcode
-        )
-        db.session.add(a)
-        db.session.commit()
+            a = user(userID = None, 
+                name=name,
+                email=email,
+                password=password,
+                address=street,
+                city=city,
+                state=state,
+                zipcode=zipcode
+            )
+            db.session.add(a)
+            db.session.commit()
+            return redirect(url_for('home'))
+        else:
+            print("An account with this email already exists!")
+            return redirect(url_for('register'))
         # return redirect(url_for('registration_success'))  # Redirect to a success page or another route after adding user
     # If it's a GET request, render the registration form
     return render_template('register.html')
