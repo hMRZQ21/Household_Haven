@@ -85,12 +85,13 @@ create table if not exists "cart" (
 );
 
 insert into "cart" values (0, 0);
+insert into "cart" values (1, 1);
 
 create table if not exists "cartItems" (
 	"cartItemID" serial,
 	"cartID" int,
 	"productID" int,
-	"quantity" int not NULL,
+	"quantity" int not NULL default 1,
 	primary key ("cartItemID"),
 	foreign key ("cartID")references "cart" ("cartID") on update cascade,
 	foreign key ("productID") references "product" ("productID") on update cascade
