@@ -21,7 +21,7 @@ DB_NAME = os.getenv('DB_NAME')
 conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='build', template_folder='build/templates')
 
 # Configure the database connection URI. using the environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = conn
@@ -100,12 +100,12 @@ def register():
         if not exists:
     
             a = user(userID = None, 
-                name=name,
-                email=email,
+                name=name.lower(),
+                email=email.lower(),
                 password=password,
-                address=street,
-                city=city,
-                state=state,
+                address=street.upper(),
+                city=city.upper(),
+                state=state.upper(),
                 zipcode=zipcode
             )
             db.session.add(a)
@@ -116,7 +116,7 @@ def register():
             alert_user = "An account with this email already exists!"
             print("An account with this email already exists!")
             return render_template('register.html', alert_user=alert_user, valid_creds=valid_creds)
-        # return redirect(url_for('registration_success'))  # Redirect to a success page or another route after adding user
+       
     # If it's a GET request, render the registration form
     return render_template('register.html')
 
@@ -144,7 +144,7 @@ def login():
                 valid_creds = False
                 alert_user = "Invalid password!"
                 return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
-        # return redirect(url_for('registration_success'))  # Redirect to a success page or another route after adding user
+       
     # If it's a GET request, render the registration form
     return render_template('login.html')
 
