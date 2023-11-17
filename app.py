@@ -125,7 +125,7 @@ def login():
     valid_creds = True
 
     if request.method == 'POST':
-        email = request.form.get('email')
+        email = request.form.get('email').lower()
         password = request.form.get('password')
         
         exists_email = user.query.filter_by(email=email).first()
