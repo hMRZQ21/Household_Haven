@@ -39,7 +39,7 @@ login_manager.login_view = "login"
 
 @login_manager.user_loader
 def load_user(userID):
-    if user.query.get((int(userID))):
+    if user.query.get(int(userID)):
         return user.query.get(int(userID))
     
 
@@ -80,7 +80,7 @@ def home():
         data = user.query.all()
         columns = user.__table__.columns.keys()
     # print(data) # Might not work
-    return render_template('index.html', data=data,columns=columns)
+    return render_template('index.html', data=data,columns=columns,current_user=current_user)
 
 @app.route('/register', methods = ['GET','POST'])
 def register():
@@ -128,16 +128,16 @@ def login():
         email = request.form.get('email').lower()
         password = request.form.get('password')
         
-        exists_email = user.query.filter_by(email=email).first()
-        print(exists_email)
+        cur_user = user.query.filter_by(email=email).first()
+        print(cur_user)
 
-        if not exists_email:
+        if not cur_user:
             valid_creds = False
             alert_user = "This account does not exist!"
             return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
         else:
-            if password == exists_email.password:
-                # login_user(exists_email)
+            if password == cur_user.password:
+                login_user(cur_user)
                 print("User login successful!")
                 return redirect(url_for('index'))
             else:
@@ -147,6 +147,12 @@ def login():
        
     # If it's a GET request, render the registration form
     return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__': 
     app.run(debug=True)
