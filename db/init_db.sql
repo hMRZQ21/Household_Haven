@@ -1,3 +1,5 @@
+
+-- DROP table if exists "user";
 Create table if not exists "user" (
 	"userID" SERIAL,
 	"name" VARCHAR(100) NOT NULL,
@@ -11,9 +13,13 @@ Create table if not exists "user" (
 	PRIMARY KEY ("userID")
 );
 
-INSERT INTO "user" VALUES (0, '"HI"', '"SOething"', '"123"', '"12345"', '"sad"', 'ny', 10001, 0);
-INSERT INTO "user" VALUES (1, '"bye"', '"SOething"', '"123"', '"12345"', '"sad"', 'ny', 10001, 0);
+INSERT INTO "user" ("name", "email", "password", "address", "city", "state", "zipcode", "usertype")
+VALUES ('hi', 'something@example.com', '123', 'WEIRD ST', 'NYC', 'NY', 10001, 0);
 
+-- SELECT * FROM "user"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+
+-- DROP table if exists "order";
 create table if not exists "order"(
 	"orderID" serial,
 	"userID" int,
@@ -24,8 +30,12 @@ create table if not exists "order"(
 	foreign key ("userID") references "user" ("userID") on Update cascade
 );
 
-insert into "order" ("orderID", "userID", "status", "totalAmount") values (0, 1, 'Processing' , 420.69);
+insert into "order" ("userID", "status", "totalAmount") 
+values (1, 'Processing', 420.69);
+-- SELECT * FROM "order"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "product";
 CREATE table if not exists "product" (
 	"productID" serial,
 	"sellerID" INT NOT NULL,
@@ -36,9 +46,13 @@ CREATE table if not exists "product" (
 	Primary Key ("productID"),
 	Foreign Key ("sellerID") References "user" ("userID") ON update CASCADE);
 	
-Insert into "product" values (0,0,'ur mom', 'big chungus', 69.69, 420);
-Insert into "product" values (1,0,'ur dad', 'smol chungus', 12.12, 69);
+Insert into "product" ("sellerID", "itemName", "itemDesc", "price", "stock")
+values (1, 'ur mom', 'big chungus', 69.69, 420),
+	   (1, 'ur dad', 'smol chungus', 12.12, 69);
+-- SELECT * FROM "product"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "review";
 create table if not exists "review" (
 	"reviewID" serial,
 	"userID" INT not NULL,
@@ -47,12 +61,16 @@ create table if not exists "review" (
 	"rating" numeric(2,1) NOT NULL,
 	"comment" varchar(250),
 	Primary Key ("reviewID"),
-	Foreign Key ("userID") References "user" ("userID") on UPDATE caScade,
-	Foreign Key ("productID") References "product" ("productID") on update casCAde
+	Foreign Key ("userID") References "user" ("userID") on UPDATE cascade,
+	Foreign Key ("productID") References "product" ("productID") on UPDATE cascade
 );
 
-insert into "review" ("reviewID", "userID", "productID", "rating", "comment" ) vaLUes (0, 0, 0, 1.2,'she ate all my carrots');
+insert into "review" ("userID", "productID", "rating", "comment") 
+values (1, 1, 1.2, 'she ate all my carrots');
+-- SELECT * FROM "review"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "payment";
 create table if not exists "payment" (
 	"transactionID" serial,
 	"orderID" int,
@@ -63,8 +81,12 @@ create table if not exists "payment" (
 	foreign key ("orderID") references "order" ("orderID") on update cascade
 );
 
-insert into "payment" values(0,0, 'MasterCard', 420.69, 'Fulfilled');
+insert into "payment" ("orderID", "paymentMethod", "amount", "status")
+values(1, 'MasterCard', 420.69, 'Fulfilled');
+-- SELECT * FROM "payment"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "orderItem";
 create table if not exists "orderItem"(
 	"orderItemID" serial,
 	"orderID" int,
@@ -75,8 +97,12 @@ create table if not exists "orderItem"(
 	foreign key ("productID") references "product" ("productID") on update cascade
 );
 
-insert into "orderItem" values (0, 0, 1, 300);
+insert into "orderItem" ("orderID", "productID", "quantity")
+values (1, 1, 300);
+-- SELECT * FROM "orderItem"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "cart";
 create table if not exists "cart" (
 	"cartID" serial,
 	"userID" int,
@@ -84,9 +110,12 @@ create table if not exists "cart" (
 	foreign key ("userID") references "user" ("userID") on update cascade
 );
 
-insert into "cart" values (0, 0);
-insert into "cart" values (1, 1);
+insert into "cart" ("userID") values (1);
+insert into "cart" ("userID") values (1);
+-- SELECT * FROM "cart"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "cartItems";
 create table if not exists "cartItems" (
 	"cartItemID" serial,
 	"cartID" int,
@@ -98,9 +127,12 @@ create table if not exists "cartItems" (
  );
  
  
- insert into "cartItems" values (0,0,0,99);
- insert into "cartItems" values (1,0,1,5);
+ insert into "cartItems" ("cartID", "productID", "quantity")
+ values (1, 1, 99), (1, 1, 5);
+-- SELECT * FROM "cartItems"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
+-- DROP table if exists "category";
 CREATE table if not exists "category"(
 	"categoryID" serial,
 	"parentCategoryID" INT NOT NULL,
@@ -110,6 +142,9 @@ CREATE table if not exists "category"(
 	Foreign Key ("parentCategoryID") References "category" ("categoryID")
 );
 
-INSERT INTO "category" values (0, 0, 'chairs', 'something to sit on');
-INSERT INTO "category" values (1, 0, 'stools', 'a chair with no backrest');
-INSERT INTO "category" values (2, 2, 'table', 'somewhere to place goods');
+INSERT INTO "category" ("parentCategoryID", "name", "desc") 
+values (1, 'chairs', 'something to sit on'),
+	   (1, 'stools', 'a chair with no backrest'),
+	   (2, 'table', 'somewhere to place goods');
+-- SELECT * FROM "category"
+-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
