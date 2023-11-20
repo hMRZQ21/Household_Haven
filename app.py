@@ -6,7 +6,7 @@ from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
-from dbModels import db, user
+from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
 
 # Load environment variables from .env file
 load_dotenv()
@@ -148,6 +148,18 @@ def login():
 @login_required
 def profile():
     return render_template('profile.html', current_user = current_user)
+
+table_names = ['user', 'product', 'review', 'cart', 'cartItems', 'order', 'orderItem', 'payment', 'category']
+@app.route('/database', methods = ['GET', 'POST'])
+def database():
+
+    cur_table = request.form.get('dropdown', 'user')
+    print(cur_table)
+    model_class = globals()[cur_table]
+    data = model_class.query.all()
+    column_names = [column.name for column in model_class.__table__.columns]
+    
+    return render_template('database.html', data=data, table_names=table_names, cur_table=cur_table, column_names=column_names)
 
 @app.route('/logout')
 @login_required
