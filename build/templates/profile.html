@@ -57,16 +57,45 @@
             display: inline-block;
             margin-top: 20px;
         }
+
+        nav {
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex; /* Use flex to make items fill horizontally */
+            width: 70%; /* Set the width to 70% of the viewport width */
+            margin: 0 auto; /* Center the navbar */
+        }
+
+        nav a {
+            flex: 1; /* Make each item fill the available space */
+            display: block;
+            color: #ffffff;
+            text-align: center;
+            padding: 14px 0;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>User Profile</h1>
+    <h1>Profile</h1>
 </header>
-
+<nav>
+    <a href="{{url_for('home')}}">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">Cart</a>
+    <a href="#">Browse</a>
+</nav>
 <section>
     <h2>Welcome, {{current_user.name}}!</h2>
+
+    
 
     <div class="profile-info">
 
