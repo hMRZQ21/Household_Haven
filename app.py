@@ -72,6 +72,9 @@ def home():
 @app.route('/register', methods = ['GET','POST'])
 def register():
     valid_creds = True
+
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
     
     if request.method == 'POST':
         name = request.form.get('name')
@@ -113,7 +116,10 @@ def register():
 def login():
     valid_creds = True
 
-    if request.method == 'POST':
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+
+    elif request.method == 'POST':
         email = request.form.get('email').lower()
         password = request.form.get('password')
         
@@ -129,8 +135,7 @@ def login():
             if password == cur_user.password:
                 login_user(cur_user)
                 print("User login successful!")
-                return redirect(url_for('index'))
-        
+                return redirect(url_for('profile'))
             else:
                 valid_creds = False
                 alert_user = "Invalid password!"
@@ -138,6 +143,11 @@ def login():
        
     # If it's a GET request, render the registration form
     return render_template('login.html')
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', current_user = current_user)
 
 @app.route('/logout')
 @login_required
