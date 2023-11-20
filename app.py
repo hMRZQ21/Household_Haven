@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 import os
 from dbModels import db, user
 
-
 # Load environment variables from .env file
 load_dotenv()
 
@@ -46,6 +45,7 @@ def load_user(userID):
 try: # Check if the connection is successful
     with app.app_context(): db.engine.connect()
     print("Connected to the database successfully!")
+
 except Exception as e:
     print(f"Failed to connect to the database. Error: {e}")
 
@@ -55,18 +55,6 @@ def index():
 
 @app.route('/home', methods = ['GET', 'POST'])
 def home():
-    # Rough format for adding rows to our database
-
-    # a = user(userID = None, 
-    #       name = "hello", 
-    #       email = "something?", 
-    #       password = "help", 
-    #       address = "helppls", 
-    #       city = "Brooklyn", 
-    #       state = 'ny', 
-    #       zipcode = 10010, 
-    #       usertype = 0)
-    
     # print(a)
     # db.session.add(a)
     # db.session.commit()
@@ -79,6 +67,7 @@ def home():
     with app.app_context():
         data = user.query.all()
         columns = user.__table__.columns.keys()
+    
     # print(data) # Might not work
     return render_template('index.html', data=data,columns=columns,current_user=current_user)
 
