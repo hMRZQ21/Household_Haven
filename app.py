@@ -29,7 +29,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = conn
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['SECRET_KEY'] = 'secretkey'
-
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -39,8 +38,7 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(userID):
     if user.query.get(int(userID)):
-        return user.query.get(int(userID))
-    
+        return user.query.get(int(userID))  
 
 try: # Check if the connection is successful
     with app.app_context(): db.engine.connect()
@@ -100,10 +98,12 @@ def register():
             db.session.add(a)
             db.session.commit()
             return redirect(url_for('home'))
+        
         else:
             valid_creds = False
             alert_user = "An account with this email already exists!"
             print("An account with this email already exists!")
+        
             return render_template('register.html', alert_user=alert_user, valid_creds=valid_creds)
        
     # If it's a GET request, render the registration form
@@ -124,11 +124,13 @@ def login():
             valid_creds = False
             alert_user = "This account does not exist!"
             return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
+        
         else:
             if password == cur_user.password:
                 login_user(cur_user)
                 print("User login successful!")
                 return redirect(url_for('index'))
+        
             else:
                 valid_creds = False
                 alert_user = "Invalid password!"
