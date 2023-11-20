@@ -29,6 +29,9 @@ class user(db.Model, UserMixin):
     zipcode = db.Column(db.Integer, nullable=False)
     usertype = db.Column(db.Integer, nullable=False, default=0)
 
+    def get_id(self):
+        return str(self.userID)
+
 class product(db.Model, UserMixin):
     __tablename__ = 'product'
 
