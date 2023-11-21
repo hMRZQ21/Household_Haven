@@ -31,6 +31,14 @@
         <label for="zipcode">Zipcode:</label>
         <input type="text" id="zipcode" name="zipcode" required>
 
+        
+        <div class="checkbox-wrapper">
+            <label for="usertype" class="checkbox-label">
+                <span>I am a seller</span>
+                <input type="checkbox" id="usertype" name="usertype">
+            </label>
+        </div>        
+
         <input type="submit" value="Submit">
 
         {% if valid_creds == False %}

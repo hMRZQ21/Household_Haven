@@ -83,7 +83,10 @@ def register():
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
-        zipcode = request.form.get("zipcode")
+        zipcode = request.form.get('zipcode')
+        usertype = request.form.get('usertype')
+
+        if usertype == 'on': usertype = '1'
         
         exists = user.query.filter_by(email=email).first()
         print(exists)
@@ -96,7 +99,8 @@ def register():
                 address=street.upper(),
                 city=city.upper(),
                 state=state.upper(),
-                zipcode=zipcode
+                zipcode=zipcode,
+                usertype=usertype
             )
             db.session.add(a)
             db.session.commit()
