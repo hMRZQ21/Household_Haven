@@ -6,8 +6,7 @@ from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
-from dbModels import db, user
-
+from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
 
 # Load environment variables from .env file
 load_dotenv()
@@ -30,7 +29,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = conn
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['SECRET_KEY'] = 'secretkey'
-
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -39,13 +37,13 @@ login_manager.login_view = "login"
 
 @login_manager.user_loader
 def load_user(userID):
-    if user.query.get((int(userID))):
-        return user.query.get(int(userID))
-    
+    if user.query.get(int(userID)):
+        return user.query.get(int(userID))  
 
 try: # Check if the connection is successful
     with app.app_context(): db.engine.connect()
     print("Connected to the database successfully!")
+
 except Exception as e:
     print(f"Failed to connect to the database. Error: {e}")
 
@@ -55,18 +53,6 @@ def index():
 
 @app.route('/home', methods = ['GET', 'POST'])
 def home():
-    # Rough format for adding rows to our database
-
-    # a = user(userID = None, 
-    #       name = "hello", 
-    #       email = "something?", 
-    #       password = "help", 
-    #       address = "helppls", 
-    #       city = "Brooklyn", 
-    #       state = 'ny', 
-    #       zipcode = 10010, 
-    #       usertype = 0)
-    
     # print(a)
     # db.session.add(a)
     # db.session.commit()
@@ -79,12 +65,16 @@ def home():
     with app.app_context():
         data = user.query.all()
         columns = user.__table__.columns.keys()
+    
     # print(data) # Might not work
-    return render_template('index.html', data=data,columns=columns)
+    return render_template('index.html', data=data,columns=columns,current_user=current_user)
 
 @app.route('/register', methods = ['GET','POST'])
 def register():
     valid_creds = True
+
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
     
     if request.method == 'POST':
         name = request.form.get('name')
@@ -111,10 +101,12 @@ def register():
             db.session.add(a)
             db.session.commit()
             return redirect(url_for('home'))
+        
         else:
             valid_creds = False
             alert_user = "An account with this email already exists!"
             print("An account with this email already exists!")
+        
             return render_template('register.html', alert_user=alert_user, valid_creds=valid_creds)
        
     # If it's a GET request, render the registration form
@@ -124,22 +116,26 @@ def register():
 def login():
     valid_creds = True
 
-    if request.method == 'POST':
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
+
+    elif request.method == 'POST':
         email = request.form.get('email').lower()
         password = request.form.get('password')
         
-        exists_email = user.query.filter_by(email=email).first()
-        print(exists_email)
+        cur_user = user.query.filter_by(email=email).first()
+        print(cur_user)
 
-        if not exists_email:
+        if not cur_user:
             valid_creds = False
             alert_user = "This account does not exist!"
             return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
+        
         else:
-            if password == exists_email.password:
-                # login_user(exists_email)
+            if password == cur_user.password:
+                login_user(cur_user)
                 print("User login successful!")
-                return redirect(url_for('index'))
+                return redirect(url_for('profile'))
             else:
                 valid_creds = False
                 alert_user = "Invalid password!"
@@ -147,6 +143,29 @@ def login():
        
     # If it's a GET request, render the registration form
     return render_template('login.html')
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html', current_user = current_user)
+
+table_names = ['user', 'product', 'review', 'cart', 'cartItems', 'order', 'orderItem', 'payment', 'category']
+@app.route('/database', methods = ['GET', 'POST'])
+def database():
+
+    cur_table = request.form.get('dropdown', 'user')
+    print(cur_table)
+    model_class = globals()[cur_table]
+    data = model_class.query.all()
+    column_names = [column.name for column in model_class.__table__.columns]
+    
+    return render_template('database.html', data=data, table_names=table_names, cur_table=cur_table, column_names=column_names)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
 
 if __name__ == '__main__': 
     app.run(debug=True)

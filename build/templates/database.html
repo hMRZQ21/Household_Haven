@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title>Database Data Page</title>
+</head>
+<body>
+    <h1>Data from PostgreSQL</h1>
+    <table border="1">
+        <form method="post">
+            <label for="dropdown">Select a table:</label>
+            <select id="dropdown" name="dropdown">
+                {% for table_name in table_names %}
+                    <option value="{{ table_name }}">
+                        {{ table_name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit">Load Data</button>
+        </form>
+
+        <h2>Data from {{ cur_table }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    {% for column_name in column_names %}
+                        <th>{{ column_name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in data %}
+                    <tr>
+                        {% for column_name in column_names %}
+                            <td>{{ item[column_name] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </table>
+</body>
+</html>

@@ -1,80 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Registration Form</title>
+    <link rel="stylesheet" href="../../build/styles/register.css"> <!-- Link to external CSS file -->
 </head>
 <body>
-    <h2>User Registration</h2>
     <form method="post">
-        
+        <h2>User Registration</h2>
+
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
+        <input type="text" id="name" name="name" required>
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+        <input type="email" id="email" name="email" required>
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+        <input type="password" id="password" name="password" required>
 
         <label for="street">Street:</label>
-        <input type="text" id="street" name="street" required><br><br>
+        <input type="text" id="street" name="street" required>
 
         <label for="city">City:</label>
-        <input type="text" id="city" name="city" required><br><br>
+        <input type="text" id="city" name="city" required>
 
         <label for="state">State:</label>
-        <input type="text" id="state" name="state" required><br><br>
+        <input type="text" id="state" name="state" required>
 
         <label for="zipcode">Zipcode:</label>
-        <input type="text" id="zipcode" name="zipcode" required><br><br>
+        <input type="text" id="zipcode" name="zipcode" required>
 
-        <input type="submit" Submit>
+        <input type="submit" value="Submit">
 
-        {%if (valid_creds == False)%} 
-    
-
-            <div class = "alert alert-warning" role="alert">
-              {{alert_user}}
+        {% if valid_creds == False %}
+            <div class="alert" role="alert">
+                {{ alert_user }}
             </div>
-        {%endif%}
+        {% endif %}
     </form>
 </body>
 </html>
-
-<!-- stuff from 322: -->
-<!-- <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset = "utf-8">
-        <title>Denisse's Cafe Register</title>
-        <link rel="stylesheet" href="./styles/login.css">
-        <script src="./scripts/register.js"></script>
-    </head>
-    <body>
-        <div class="container">
-            <a href="/"><img class="pic" src="./imgs/Logo.png" width="200px"></a>
-            <form class = "box">
-                <h3>REGISTER</h3>
-                <label>Enter name:</label>
-                <input type="text" name="" placeholder="Username" id="name">
-                <label>Enter phone number:</label>
-                <input type="text" name="" placeholder="Username" id="phoneNumber">
-                <label>Enter username:</label>
-                <input type="text" name="" placeholder="Username" id="username">
-                <label>Enter password:</label>
-                <input type="password" name="" placeholder="Password" id="password">
-                <label>Confirm password:</label>
-                <input type="password" name="" placeholder="Password" id="password">
-            </form>
-            <div class ="buttons">
-        
-                <button class="register" onclick="register()">Register</button>
-            
-                <a href="/login" style="text-decoration:none">
-                    <button class="login">Login</button>
-                </a>
-                
-            </div>
-        </div>
-    </body>
-</html> -->

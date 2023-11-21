@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - E-Commerce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em;
+            text-align: center;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .profile-info {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .profile-info div {
+            width: 48%;
+        }
+
+        .profile-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .logout-btn {
+            background-color: #d9534f;
+            color: #fff;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        nav {
+            background-color: #007bff;
+            overflow: hidden;
+            display: flex; /* Use flex to make items fill horizontally */
+            width: 70%; /* Set the width to 70% of the viewport width */
+            margin: 0 auto; /* Center the navbar */
+        }
+
+        nav a {
+            flex: 1; /* Make each item fill the available space */
+            display: block;
+            color: #ffffff;
+            text-align: center;
+            padding: 14px 0;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #0056b3;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Profile</h1>
+</header>
+<nav>
+    <a href="{{url_for('home')}}">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">Cart</a>
+    <a href="#">Browse</a>
+</nav>
+<section>
+    <h2>Welcome, {{current_user.name}}!</h2>
+
+    
+
+    <div class="profile-info">
+
+        <div>
+            <p><strong>Email:</strong> {{current_user.email}}</p>
+            <p><strong>Address:</strong> {{current_user.address}}</p>
+        </div>
+    </div>
+
+    <a href="{{url_for('logout')}}" class="logout-btn">Logout</a>
+</section>
+
+</body>
+</html>

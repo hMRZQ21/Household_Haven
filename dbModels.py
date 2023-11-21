@@ -12,9 +12,6 @@ import datetime
 db = SQLAlchemy()
 
 # need to double check the relationships here ###
-##
-##
-##
 
 class user(db.Model, UserMixin):
     __tablename__ = "user"
@@ -28,6 +25,8 @@ class user(db.Model, UserMixin):
     state = db.Column(db.String(2), nullable=False)
     zipcode = db.Column(db.Integer, nullable=False)
     usertype = db.Column(db.Integer, nullable=False, default=0)
+
+    def get_id(self): return str(self.userID)
 
 class product(db.Model, UserMixin):
     __tablename__ = 'product'
