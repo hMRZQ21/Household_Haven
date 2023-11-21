@@ -83,23 +83,33 @@ def register():
         street = request.form.get('street')
         city = request.form.get('city')
         state = request.form.get('state')
-        zipcode = request.form.get("zipcode")
+        zipcode = request.form.get('zipcode')
+        usertype = request.form.get('usertype')
+
+        if usertype == 'on': usertype = '1'
         
         exists = user.query.filter_by(email=email).first()
         print(exists)
         if not exists:
     
-            a = user(userID = None, 
+            create_user = user(userID = None, 
                 name=name.lower(),
                 email=email.lower(),
                 password=password,
                 address=street.upper(),
                 city=city.upper(),
                 state=state.upper(),
-                zipcode=zipcode
+                zipcode=zipcode,
+                usertype=usertype
             )
-            db.session.add(a)
+
+            db.session.add(create_user)
             db.session.commit()
+
+            create_cart = cart(cartID=None, userID=create_user.userID)
+            db.session.add(create_cart)
+            db.session.commit()
+
             return redirect(url_for('home'))
         
         else:

@@ -54,25 +54,3 @@ input[type="submit"]:hover {
     border-radius: 4px;
     margin-top: 16px;
 }
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    margin: 12px;
-}
-
-.checkbox-label span {
-    margin-right: 10px; /* Adjust the spacing between text and checkbox */
-    white-space: nowrap; /* Prevent line break */
-    vertical-align: middle;
-}
-
-.checkbox-label input#usertype {
-    margin: 8px;
-}
-
-div {
-    display: inline-block;
-    vertical-align: top;
-    padding: 10px;
-}

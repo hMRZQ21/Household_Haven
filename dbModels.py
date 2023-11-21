@@ -76,7 +76,7 @@ class orderItem(db.Model, UserMixin):
 class cart(db.Model, UserMixin):
     __tablename__ = 'cart'
 
-    cartID = db.Column(db.Integer, primary_key=True, autoincrement=False)
+    cartID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
 
 class cartItems(db.Model, UserMixin):
