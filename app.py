@@ -92,7 +92,7 @@ def register():
         print(exists)
         if not exists:
     
-            a = user(userID = None, 
+            create_user = user(userID = None, 
                 name=name.lower(),
                 email=email.lower(),
                 password=password,
@@ -102,8 +102,14 @@ def register():
                 zipcode=zipcode,
                 usertype=usertype
             )
-            db.session.add(a)
+
+            db.session.add(create_user)
             db.session.commit()
+
+            create_cart = cart(cartID=None, userID=create_user.userID)
+            db.session.add(create_cart)
+            db.session.commit()
+
             return redirect(url_for('home'))
         
         else:
