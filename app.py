@@ -161,15 +161,20 @@ def profile():
 
 table_names = ['user', 'product', 'review', 'cart', 'cartItems', 'order', 'orderItem', 'payment', 'category']
 @app.route('/database', methods = ['GET', 'POST'])
+@login_required
 def database():
 
-    cur_table = request.form.get('dropdown', 'user')
-    print(cur_table)
-    model_class = globals()[cur_table]
-    data = model_class.query.all()
-    column_names = [column.name for column in model_class.__table__.columns]
-    
-    return render_template('database.html', data=data, table_names=table_names, cur_table=cur_table, column_names=column_names)
+    if current_user.usertype != 2:
+        return redirect(url_for('home'))
+    else:
+
+        cur_table = request.form.get('dropdown', 'user')
+        print(cur_table)
+        model_class = globals()[cur_table]
+        data = model_class.query.all()
+        column_names = [column.name for column in model_class.__table__.columns]
+        
+        return render_template('database.html', data=data, table_names=table_names, cur_table=cur_table, column_names=column_names)
 
 @app.route('/logout')
 @login_required
