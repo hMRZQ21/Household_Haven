@@ -52,16 +52,8 @@ def index():
     return 'Hello, welcome to Household Haven!'
 
 @app.route('/home', methods = ['GET', 'POST'])
+# stop displaying tables
 def home():
-    # print(a)
-    # db.session.add(a)
-    # db.session.commit()
-
-    # Rough format for deleting rows from database based off of primary key value
-    # b = user.query.get(3)
-    # db.session.delete(b)
-    # db.session.commit()
-
     with app.app_context():
         data = user.query.all()
         columns = user.__table__.columns.keys()
@@ -163,18 +155,15 @@ table_names = ['user', 'product', 'review', 'cart', 'cartItems', 'order', 'order
 @app.route('/database', methods = ['GET', 'POST'])
 @login_required
 def database():
-
     if current_user.usertype != 2:
         return redirect(url_for('home'))
-    else:
-
-        cur_table = request.form.get('dropdown', 'user')
-        print(cur_table)
-        model_class = globals()[cur_table]
-        data = model_class.query.all()
-        column_names = [column.name for column in model_class.__table__.columns]
-        
-        return render_template('database.html', data=data, table_names=table_names, cur_table=cur_table, column_names=column_names)
+    
+    cur_table = request.form.get('dropdown', 'user')
+    print(cur_table)
+    model_class = globals()[cur_table]
+    data = model_class.query.all()
+    column_names = [column.name for column in model_class.__table__.columns]
+    return render_template('database.html', data=data, table_names=table_names, cur_table=cur_table, column_names=column_names)
 
 @app.route('/logout')
 @login_required
