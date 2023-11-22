@@ -17,6 +17,12 @@
         <input type="password" id="password" name="password" required>
 
         <input type="submit" value="Submit">
+        <center>
+            <div>
+                <a href="{{url_for('register')}}">Don't have an account? Register Now!</a>
+            </div>
+        </center>
+        
 
         {% if valid_creds == False %}
             <div class="alert" role="alert">

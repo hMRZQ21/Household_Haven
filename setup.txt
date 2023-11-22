@@ -20,9 +20,12 @@ We will be using python 3.x.x
 
 3. Install required dependencies:
     "pip3 install -r ./requirements.txt"
+    "npm install node"
+    "npm install react"
 
 4. check environment dependencies:
     "pip list"
+    "npm list"
 
 4. Run the server
     "python3 ./app.py" or "flask run"

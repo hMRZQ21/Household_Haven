@@ -38,8 +38,13 @@
                 <input type="checkbox" id="usertype" name="usertype">
             </label>
         </div>      
-
+        <br>
         <input type="submit" value="Submit">
+        <center>
+            <div>
+                <a href="{{url_for('login')}}">Already have an account? Login Now!</a>
+            </div>
+        </center>
 
         {% if valid_creds == False %}
             <div class="alert" role="alert">
