@@ -1,8 +1,8 @@
-.env
-**HHH
-**__pycache__
-.DS_Store
 HHH
 node_modules
 package-lock.json
 package.json
+**HHH
+**__pycache__
+.DS_Store
+.env
