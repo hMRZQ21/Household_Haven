@@ -15,6 +15,7 @@ We will be using python 3.x.x
     "python3 -m venv HHH"
 
 2. Activate virtual env:
+    cd flask-backend
     Windows: "HHH\Scripts\activate"
     Mac: "source venv/bin/activate"
 

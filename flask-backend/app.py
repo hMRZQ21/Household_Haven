@@ -1,11 +1,12 @@
 from click import password_option
 from flask import Flask, g, redirect, render_template, url_for, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 from flask_login import LOGIN_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
 import os
+from flask_cors import CORS, cross_origin
 from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
 
 # Load environment variables from .env file
@@ -21,14 +22,16 @@ conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
 
 app = Flask(__name__, static_folder='build', template_folder='build/templates')
+cors = CORS(app) # enable CORS for all API routes:
 
 # Configure the database connection URI. using the environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = conn
 
 # Suppress deprecation warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 app.config['SECRET_KEY'] = 'secretkey'
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 db.init_app(app)
 
 login_manager = LoginManager()
@@ -48,6 +51,7 @@ except Exception as e:
     print(f"Failed to connect to the database. Error: {e}")
 
 @app.route('/')
+@cross_origin()
 def index():
     return 'Hello, welcome to Household Haven!'
 
