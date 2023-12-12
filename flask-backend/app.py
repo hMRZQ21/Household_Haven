@@ -22,7 +22,7 @@ conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
 
 app = Flask(__name__, static_folder='build', template_folder='build/templates')
-cors = CORS(app) # enable CORS for all API routes:
+CORS(app) # enable CORS for all API routes:
 
 # Configure the database connection URI. using the environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = conn
@@ -174,6 +174,11 @@ def database():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+@app.route('/api')
+def api():
+    response = {'message': 'NO YOU, World!'}
+    return jsonify(response)
 
 if __name__ == '__main__': 
     app.run(debug=True)
