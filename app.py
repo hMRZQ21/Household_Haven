@@ -185,17 +185,18 @@ def edit_prof():
         current_password = request.form.get('current_password')
 
         if current_user.password == current_password:
-            current_user.name = name
-            current_user.password = password
-            current_user.street = street
-            current_user.city = city
-            current_user.state = state
-            current_user.zipcode = zipcode
+            if name: current_user.name = name
+            if password: current_user.password = password
+
+            if street: current_user.address = street
+            if city: current_user.city = city
+            if state: current_user.state = state
+            if zipcode: current_user.zipcode = zipcode
             db.session.commit()
 
             return redirect(url_for('profile'))
         
-        elif current_password != current_user.password:
+        else: 
             correct_pass = False
             alert_user = "The current password you entered was incorrect."
             return render_template('edit_prof.html', correct_pass = correct_pass, alert_user = alert_user)
