@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - E-Commerce</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <h1>Edit Profile</h1>
+</header>
+<nav>
+    <a href="{{url_for('home')}}">Home</a>
+    <a href="#">Shop</a>
+    <a href="#">Cart</a>
+    <a href="#">Browse</a>
+</nav>
+<section>
+    <h2>Welcome, {{current_user.name}}!</h2>
+
+    <div class="profile-info">
+        <div>
+            <h3>Edit your profile information</h3>
+            
+            <form method="post">
+                <h2>User Registration</h2>
+        
+                <div>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+        
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+        
+                    <label for="street">Street:</label>
+                    <input type="text" id="street" name="street" required>
+                    <br>
+                    <label for="city">City:</label>
+                    <br>
+                    <input type="text" id="city" name="city" required>
+                    
+            
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state" required>
+            
+                    <label for="zipcode">Zipcode:</label>
+                    <input type="text" id="zipcode" name="zipcode" required>
+                </div>     
+                    <br>
+                    <label for="current_password">Please enter your current password:</label>
+                    <input type="text" id="current_password" name="current_password" required>
+                    <br>
+                    <br>
+                    <input type="submit" value="Submit">
+                    <br>
+
+                {% if correct_pass == False %}
+                    <div class="alert" role="alert">
+                        {{ alert_user }}
+                    </div>
+                {% endif %}
+        </div>
+        
+    </div>
+
+    <!-- <a href="{{url_for('logout')}}" class="logout-btn">Logout</a> -->
+</section>
+
+</body>
+</html>

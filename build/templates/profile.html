@@ -28,7 +28,11 @@
             <p><strong>City:</strong> {{current_user.city}}</p>
             <p><strong>State:</strong> {{current_user.state}}</p>
             <p><strong>Zipcode:</strong> {{current_user.zipcode}}</p>
+            <form action="{{ url_for('edit_prof') }}" method="post">
+                <button type="submit">Edit Profile Information</button>
+            </form>
         </div>
+       
     </div>
 
     <a href="{{url_for('logout')}}" class="logout-btn">Logout</a>
