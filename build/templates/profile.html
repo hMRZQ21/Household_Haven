@@ -13,9 +13,11 @@
 </header>
 <nav>
     <a href="{{url_for('home')}}">Home</a>
-    <a href="#">Shop</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+
+    <a href="{{url_for('browse')}}">Browse</a>
     <a href="#">Cart</a>
-    <a href="#">Browse</a>
+    <a href="#">Contact Us</a>
 </nav>
 <section>
     <h2>Welcome, {{current_user.name}}!</h2>

@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
 from dotenv import load_dotenv
 import os
-import stripe
+# import stripe
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,7 +20,7 @@ DB_NAME = os.getenv('DB_NAME')
 STRIPE_SECRET_KEY= os.getenv('STRIPE_SECRET_KEY')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
-stripe.api_key = STRIPE_SECRET_KEY
+# stripe.api_key = STRIPE_SECRET_KEY
 
 conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
@@ -206,5 +206,11 @@ def edit_prof():
             alert_user = "The current password you entered was incorrect."
             return render_template('edit_prof.html', correct_pass = correct_pass, alert_user = alert_user)
 
+@app.route('/browse', methods = ['GET','POST'])
+def browse():
+    return render_template('browse.html')
+
+
+
 if __name__ == '__main__': 
-    app.run(debug=True)
+    app.run(debug=True, port=4000)
