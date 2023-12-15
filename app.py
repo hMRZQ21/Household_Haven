@@ -4,18 +4,23 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LOGIN_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
+from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
 from dotenv import load_dotenv
 import os
-from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
+import stripe
 
 # Load environment variables from .env file
 load_dotenv()
 
-# Get environment variables for database connection
+# Get environment variables
 DB_USERNAME = os.getenv('DB_USERNAME')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 DB_NAME = os.getenv('DB_NAME')
+STRIPE_SECRET_KEY= os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+
+stripe.api_key = STRIPE_SECRET_KEY
 
 conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
@@ -200,10 +205,6 @@ def edit_prof():
             correct_pass = False
             alert_user = "The current password you entered was incorrect."
             return render_template('edit_prof.html', correct_pass = correct_pass, alert_user = alert_user)
-
-            
-
-
 
 if __name__ == '__main__': 
     app.run(debug=True)
