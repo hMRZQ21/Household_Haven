@@ -7,7 +7,8 @@ from flask_bcrypt import Bcrypt
 from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
 from urllib.parse import quote_plus, urlencode
 from dotenv import load_dotenv
-import os, stripe, json
+from oauthlib.oauth2 import WebApplicationClient
+import os, stripe, json, requests
 
 # Load environment variables from .env file
 load_dotenv()
@@ -17,8 +18,13 @@ DB_USERNAME = os.getenv('DB_USERNAME')
 DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 DB_NAME = os.getenv('DB_NAME')
+
 STRIPE_SECRET_KEY= os.getenv('STRIPE_SECRET_KEY')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+
+GOOGLE_CLIENT_ID = os.getenv('google_clientID')
+GOOGLE_CLIENT_SECRET = os.getenv('google_client_secret')
+GOOGLE_DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration'
 
 stripe.api_key = STRIPE_SECRET_KEY
 
@@ -32,12 +38,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = conn
 
 # Suppress deprecation warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'secretkey'
+app.config['SECRET_KEY'] = 'secretkey' or os.urandom(24)
 db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+# OAuth 2 client setup
+client = WebApplicationClient(GOOGLE_CLIENT_ID)
+def get_google_provider_cfg():
+    return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 @login_manager.user_loader
 def load_user(userID):
@@ -119,35 +130,99 @@ def register():
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
-    valid_creds = True
+    # Find out what URL to hit for Google login
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
-    if current_user.is_authenticated:
-        return redirect(url_for('profile'))
+    # Use library to construct the request for Google login and provide
+    # scopes that let you retrieve user's profile from Google
+    request_uri = client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url + "/callback",
+        scope=["openid", "email", "profile"],
+    )
+    return redirect(request_uri)
+    # valid_creds = True
 
-    elif request.method == 'POST':
-        email = request.form.get('email').lower()
-        password = request.form.get('password')
+    # if current_user.is_authenticated:
+    #     return redirect(url_for('profile'))
+
+    # elif request.method == 'POST':
+    #     email = request.form.get('email').lower()
+    #     password = request.form.get('password')
         
-        cur_user = user.query.filter_by(email=email).first()
-        print(cur_user)
+    #     cur_user = user.query.filter_by(email=email).first()
+    #     print(cur_user)
 
-        if not cur_user:
-            valid_creds = False
-            alert_user = "This account does not exist!"
-            return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
+    #     if not cur_user:
+    #         valid_creds = False
+    #         alert_user = "This account does not exist!"
+    #         return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
         
-        else:
-            if password == cur_user.password:
-                login_user(cur_user)
-                print("User login successful!")
-                return redirect(url_for('profile'))
-            else:
-                valid_creds = False
-                alert_user = "Invalid password!"
-                return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
+    #     else:
+    #         if password == cur_user.password:
+    #             login_user(cur_user)
+    #             print("User login successful!")
+    #             return redirect(url_for('profile'))
+    #         else:
+    #             valid_creds = False
+    #             alert_user = "Invalid password!"
+    #             return render_template('login.html', alert_user=alert_user, valid_creds=valid_creds)
        
-    # If it's a GET request, render the registration form
-    return render_template('login.html')
+    # # If it's a GET request, render the registration form
+    # return render_template('login.html')
+
+@app.route('/login/callback')
+def callback():
+    # Get authorization code Google sent back to you
+    code = request.args.get("code")
+    # Find out what URL to hit to get tokens that allow you to ask for things on behalf of a user
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
+    
+    # Prepare and send a request to get tokens! Yay tokens!
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
+    )
+
+    # Parse the tokens!
+    client.parse_request_body_response(json.dumps(token_response.json()))
+
+    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
+    userinfo_response = requests.get(uri, headers=headers, data=body)
+
+    # Make sure their email is verified.
+    if userinfo_response.json().get("email_verified"):
+        unique_id = userinfo_response.json()["sub"]
+        users_email = userinfo_response.json()["email"]
+        picture = userinfo_response.json()["picture"]
+        users_name = userinfo_response.json()["given_name"]
+    else:
+        return "User email not available or not verified by Google.", 400
+    
+    # Create a user in your db with the information provided by Google
+    user = User(
+        id_=unique_id, name=users_name, email=users_email, profile_pic=picture
+    )
+    
+    if not User.get(unique_id): # Doesn't exist? add to db.
+        User.create(unique_id, users_name, users_email, picture)
+
+    # Begin user session by logging the user in
+    login_user(user)
+
+    # Send user back to homepage
+    return redirect(url_for("index"))
 
 @app.route('/profile')
 @login_required
@@ -172,7 +247,7 @@ def database():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 @app.route('/edit_prof',  methods = ['GET','POST'])
 @login_required
@@ -209,4 +284,4 @@ def browse():
     return render_template('browse.html')
 
 if __name__ == '__main__': 
-    app.run(debug=True, port=4000)
+    app.run(debug=True, ssl_context="adhoc")
