@@ -1,13 +1,13 @@
 from click import password_option
-from flask import Flask, g, redirect, render_template, url_for, request, jsonify
+from flask import Flask, g, redirect, render_template, url_for, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LOGIN_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
 from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
+from urllib.parse import quote_plus, urlencode
 from dotenv import load_dotenv
-import os
-# import stripe
+import os, stripe, json
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,7 +20,7 @@ DB_NAME = os.getenv('DB_NAME')
 STRIPE_SECRET_KEY= os.getenv('STRIPE_SECRET_KEY')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 
-# stripe.api_key = STRIPE_SECRET_KEY
+stripe.api_key = STRIPE_SECRET_KEY
 
 conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
@@ -32,7 +32,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = conn
 
 # Suppress deprecation warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 app.config['SECRET_KEY'] = 'secretkey'
 db.init_app(app)
 
@@ -63,8 +62,7 @@ def home():
         data = user.query.all()
         columns = user.__table__.columns.keys()
     
-    # print(data) # Might not work
-    return render_template('index.html', data=data,columns=columns,current_user=current_user)
+    return render_template('index.html', session=session.get('user'), pretty=json.dumps(session.get('user'), indent=4),data=data,columns=columns,current_user=current_user)
 
 @app.route('/register', methods = ['GET','POST'])
 def register():
@@ -209,8 +207,6 @@ def edit_prof():
 @app.route('/browse', methods = ['GET','POST'])
 def browse():
     return render_template('browse.html')
-
-
 
 if __name__ == '__main__': 
     app.run(debug=True, port=4000)
