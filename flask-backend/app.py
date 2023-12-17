@@ -2,9 +2,7 @@ import os, typing
 import flask, login_manager
 import database, configuration
 
-#from views.actor import blueprint as actor_blueprint
 from views.auth import blueprint as auth_blueprint
-#from views.movie import blueprint as movie_blueprint
 
 def bad_request(error: typing.Any) -> flask.Response:
     """

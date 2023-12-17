@@ -18,12 +18,12 @@ function RegisterPage() {
     };
   };
 
-  const signup = async (event) => {
+  const register = async (event) => {
     event.preventDefault();
     let { name, email, password, street, city, state, zipcode, usertype } = data;
 
     try {
-      await auth.signup(name, email, password, street, city, state, zipcode, usertype);
+      await auth.register(name, email, password, street, city, state, zipcode, usertype);
       // setRedirectToReferrer(true); // used in react-router v5
       // in react-router v6 navigate changes the pages directly.
       // comment from official docs example:
@@ -50,7 +50,7 @@ function RegisterPage() {
 
   return (
     <div className="col-10 col-md-8 col-lg-7">
-      <form onSubmit={signup}>
+      <form onSubmit={register}>
         <div className="form-row">
           {errorMessage}
           <input

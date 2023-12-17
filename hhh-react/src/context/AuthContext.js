@@ -48,7 +48,7 @@ const AuthProvider = ({ children }) => {
     return loggedInUser;
   };
 
-  const signup = async (name, email, password, street, city, state, zipcode, usertype) => {
+  const register = async (name, email, password, street, city, state, zipcode, usertype) => {
     let response = await fetch("/auth/register", {
       method: "POST",
       body: JSON.stringify({
@@ -97,7 +97,7 @@ const AuthProvider = ({ children }) => {
     <Provider
       value={{
         login,
-        signup,
+        register,
         signout,
         isAuthenticated: user ? true : false,
         user,

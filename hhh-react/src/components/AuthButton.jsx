@@ -12,8 +12,8 @@ const AuthButton = () => {
         <Link className="btn btn-primary m-1" to="/login">
           Login
         </Link>
-        <Link className="btn btn-primary m-1" to="/signup">
-          Signup
+        <Link className="btn btn-primary m-1" to="/register">
+          Register
         </Link>
       </div>
     );

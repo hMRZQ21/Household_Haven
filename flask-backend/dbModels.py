@@ -1,12 +1,6 @@
-from click import password_option
-from flask import Flask, g, redirect, render_template, url_for, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LOGIN_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user,current_user
-from sqlalchemy import ForeignKey
-from flask_bcrypt import Bcrypt
-from dotenv import load_dotenv
-import os
 import datetime
+from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
 
 # Initialize the database
 db = SQLAlchemy()
