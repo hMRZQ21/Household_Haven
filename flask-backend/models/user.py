@@ -1,4 +1,6 @@
 from flask_login import UserMixin
+from passlib.hash import pbkdf2_sha256
+from sqlalchemy.ext.hybrid import hybrid_property
 from database import db
 
 class user(db.Model, UserMixin):
@@ -15,3 +17,11 @@ class user(db.Model, UserMixin):
     usertype = db.Column(db.Integer, nullable=False, default=0)
 
     def get_id(self): return str(self.userID)
+    
+    @hybrid_property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, plaintext):
+        self._password = pbkdf2_sha256.hash(plaintext)

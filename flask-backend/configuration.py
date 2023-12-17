@@ -1,6 +1,4 @@
-import os
-
-import dotenv
+import os, dotenv
 
 # Load environment variables from .env.
 dotenv.load_dotenv()
@@ -8,21 +6,17 @@ dotenv.load_dotenv()
 # Store a reference to the absolute path of the application's home directory.
 base_directory = os.path.abspath(os.path.dirname(__file__))
 
-
 class Configuration:
     """
     Configuration is a base class that we intend to inherit when creating
     configurations.
     """
-
     pass
-
 
 class ConfigurationName:
     """
     ConfigurationName enumerates the various configuration environments.
     """
-
     DEVELOPMENT = "development"
     PRODUCTION = "production"
     TESTING = "testing"
@@ -41,6 +35,7 @@ class DevelopmentConfiguration(Configuration):
     # The database connection URI.
     # For additional details please check the following:
     # https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/config/
+    
     DB_USERNAME = os.getenv('DB_USERNAME')
     DB_PASSWORD = os.getenv('DB_PASSWORD')
     DB_HOST = os.getenv('DB_HOST')
@@ -69,7 +64,7 @@ class ProductionConfiguration(Configuration):
     DB_NAME = os.getenv('DB_NAME')
 
     SQLALCHEMY_DATABASE_URI = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
-    
+ 
     # --- Original SQLALCHEMY_DATABASE_URI code for Production
     # os.environ.get(
     #     "DATABASE_URL"
@@ -99,7 +94,6 @@ class TestingConfiguration(Configuration):
 
     # Disable all CSRF protection.
     WTF_CSRF_ENABLED = False
-
 
 # Establish a mapping between configuration names and configuration classes.
 configuration = {

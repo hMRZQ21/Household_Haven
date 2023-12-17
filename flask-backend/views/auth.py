@@ -1,14 +1,10 @@
-import flask
-import flask_login
-from passlib.hash import pbkdf2_sha256
-
 import database
-import login_manager
+import flask, flask_login, login_manager
 from models.user import user
+from passlib.hash import pbkdf2_sha256
 
 # Initialize the authentication blueprint.
 blueprint = flask.Blueprint("auth", __name__)
-
 
 @blueprint.route("/register", methods=["POST"])
 def register():
@@ -24,8 +20,7 @@ def register():
             flask.abort(400, description=f"{field} cannot be blank.")
 
     cur_user = database.db.session.query(user).filter_by(email=user_data["email"]).one()
-    if cur_user:
-        flask.abort(400, description=f"User already exists.")
+    if cur_user: flask.abort(400, description=f"User already exists.")
 
     # Initialize and populate a User object with the data submitted by the client.
     # user = user()
@@ -49,44 +44,36 @@ def register():
     # Add the User to the database and commit the transaction.
     database.db.session.add(cur_user)
     database.db.session.commit()
-
     flask_login.login_user(cur_user)
 
     # Convert the User database record (SQLAlchemy Object) into a JSON object response.
-    return flask.jsonify(
-        {
-            "userID": cur_user.userID,
-            "name": cur_user.name,
-            "email": cur_user.email,
-            "password": cur_user.password,
-            "address": cur_user.address,
-            "city": cur_user.city,
-            "state": cur_user.state,
-            "zipcode": cur_user.zipcode,
-            "usertype": cur_user.usertype,
-        }
-    )
-
+    return flask.jsonify({
+        "userID": cur_user.userID,
+        "name": cur_user.name,
+        "email": cur_user.email,
+        "password": cur_user.password,
+        "address": cur_user.address,
+        "city": cur_user.city,
+        "state": cur_user.state,
+        "zipcode": cur_user.zipcode,
+        "usertype": cur_user.usertype,
+    })
 
 @blueprint.route("/login", methods=["GET"])
 def confirm_login():
     cur_user = flask_login.current_user
-    if not cur_user.is_authenticated:
-        flask.abort(401)
+    if not cur_user.is_authenticated: flask.abort(401)
 
-    return flask.jsonify(
-        {
-            "name": cur_user.name,
-            "email": cur_user.email,
-            "password": cur_user.password,
-            "address": cur_user.address,
-            "city": cur_user.city,
-            "state": cur_user.state,
-            "zipcode": cur_user.zipcode,
-            "usertype": cur_user.usertype,
-        }
-    )
-
+    return flask.jsonify({
+        "name": cur_user.name,
+        "email": cur_user.email,
+        "password": cur_user.password,
+        "address": cur_user.address,
+        "city": cur_user.city,
+        "state": cur_user.state,
+        "zipcode": cur_user.zipcode,
+        "usertype": cur_user.usertype,
+    })
 
 @blueprint.route("/login", methods=["POST"])
 def login():
@@ -102,27 +89,25 @@ def login():
             flask.abort(400, description=f"{field} cannot be blank.")
 
     cur_user = database.db.session.query(user).filter_by(email=login_data["email"]).one()
-    if not cur_user:
+    if not cur_user: 
         flask.abort(401, description=f"Incorrect email or password.")
+    
     is_correct_password = pbkdf2_sha256.verify(login_data["password"], cur_user.password)
     if not is_correct_password:
         flask.abort(401, description=f"Incorrect email or password.")
 
     # https://flask-login.readthedocs.io/en/latest/
     flask_login.login_user(cur_user)
-    return flask.jsonify(
-        {
-            "name": cur_user.name,
-            "email": cur_user.email,
-            "password": cur_user.password,
-            "address": cur_user.address,
-            "city": cur_user.city,
-            "state": cur_user.state,
-            "zipcode": cur_user.zipcode,
-            "usertype": cur_user.usertype,
-        }
-    )
-
+    return flask.jsonify({
+        "name": cur_user.name,
+        "email": cur_user.email,
+        "password": cur_user.password,
+        "address": cur_user.address,
+        "city": cur_user.city,
+        "state": cur_user.state,
+        "zipcode": cur_user.zipcode,
+        "usertype": cur_user.usertype,
+    })
 
 @blueprint.route("/logout", methods=["POST"])
 @flask_login.login_required
@@ -130,9 +115,8 @@ def logout():
     flask_login.logout_user()
     return {}
 
-
 @login_manager.login_manager.user_loader
-def load_user(userID):
+def load_user(userID): 
     return database.db.session.get(user, int(userID))
 
 # from passlib.hash import sha256_crypt

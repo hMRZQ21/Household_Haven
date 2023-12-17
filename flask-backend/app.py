@@ -1,11 +1,7 @@
-import os
-import typing
+import os, typing
+import flask, login_manager
+import database, configuration
 
-import flask
-
-import configuration
-import database
-import login_manager
 #from views.actor import blueprint as actor_blueprint
 from views.auth import blueprint as auth_blueprint
 #from views.movie import blueprint as movie_blueprint
@@ -13,8 +9,7 @@ from views.auth import blueprint as auth_blueprint
 def bad_request(error: typing.Any) -> flask.Response:
     """
     An attachable helper function that indends to standarize the response
-    clients receive whenever we respond with an HTTP Status Code of 400
-    (Bad Request).
+    clients receive whenever we respond with an HTTP Status Code of 400 (Bad Request).
     """
     return (
         flask.jsonify(
@@ -23,10 +18,8 @@ def bad_request(error: typing.Any) -> flask.Response:
                 "name": error.name,
                 "description": error.description,
             }
-        ),
-        400,
+        ), 400,
     )
-
 
 def dispose_database_session(_: typing.Any) -> None:
     """
@@ -36,12 +29,10 @@ def dispose_database_session(_: typing.Any) -> None:
     """
     database.db.session.remove()
 
-
 def not_found(error: typing.Any) -> flask.Response:
     """
     An attachable helper function that indends to standarize the response
-    clients receive whenever we respond with an HTTP Status Code of 404
-    (Not Found).
+    clients receive whenever we respond with an HTTP Status Code of 404 (Not Found).
     """
     return (
         flask.jsonify(
@@ -50,16 +41,13 @@ def not_found(error: typing.Any) -> flask.Response:
                 "name": error.name,
                 "description": error.description,
             }
-        ),
-        404,
+        ), 404,
     )
-
 
 def unauthorized(error: typing.Any) -> flask.Response:
     """
     An attachable helper function that indends to standarize the response
-    clients receive whenever we respond with an HTTP Status Code of 401
-    (Unauthorized).
+    clients receive whenever we respond with an HTTP Status Code of 401 (Unauthorized).
     """
     return (
         flask.jsonify(
@@ -68,14 +56,11 @@ def unauthorized(error: typing.Any) -> flask.Response:
                 "name": error.name,
                 "description": error.description,
             }
-        ),
-        401,
+        ), 401,
     )
 
 def create_app(configuration_name: configuration.ConfigurationName) -> flask.app.Flask:
-    """
-    A factory function designed to create a Flask Application.
-    """
+    """ A factory function designed to create a Flask Application. """
 
     # Initialize the Flask Application.
     app = flask.Flask(__name__)
@@ -101,9 +86,9 @@ def create_app(configuration_name: configuration.ConfigurationName) -> flask.app
     app.url_map.strict_slashes = False
 
     # Load the "auth" routes onto the Flask Application. In loading the
-    # routes, requests starting with "/auth" will be forwarded to the
-    # "auth_blueprint."
+    # routes, requests starting with "/auth" will be forwarded to the "auth_blueprint."
     app.register_blueprint(auth_blueprint, url_prefix="/auth")
+    
     # Load the "actor" routes onto the Flask Application. In loading the
     # routes, requests starting with "/actors" will be forwarded to the
     # "actor_blueprint."
@@ -115,19 +100,19 @@ def create_app(configuration_name: configuration.ConfigurationName) -> flask.app
 
     # Register an error handler for 400 (Bad Request). The Flask Application
     # will call the error handler when the application returns a 400
-    # HTTP Status Code.
+    
     app.register_error_handler(400, bad_request)
     # Register an error handler for 401 (Unauthorized). The Flask Application
     # will call the error handler when the application returns a 401
-    # HTTP Status Code.
+    
     app.register_error_handler(401, unauthorized)
     # Register an error handler for 404 (Not Found). The Flask Application
-    # will call the error handler when the application returns a 404
-    # HTTP Status Code.
+    # will call the error handler when the application returns a 404.
+    
     app.register_error_handler(404, not_found)
     # Register a handler that the Flask Application will call whenever the
-    # application context is popped, which the application pops near the end of
-    # the request.
+    # application context is popped, which the application pops near the end of the request.
+    
     app.teardown_appcontext(dispose_database_session)
 
     return app
@@ -308,16 +293,18 @@ if __name__ == '__main__':
     # (development, production, or testing). The environment is set via the
     # "ENVIRONMENT" environment variable. We default to the "DEVELOPMENT"
     # environment if no environment variable is set.
+    
     configuration_name = configuration.ConfigurationName.DEVELOPMENT
     if os.environ.get("ENVIRONMENT"):
         configuration_name = os.environ.get("ENVIRONMENT")
+    
     # Validate that the environment value set via the "ENVIRONMENT" environment
     # variable is one that we expect (development, production, or testing).
     if configuration_name not in configuration.configuration:
         raise RuntimeError(
             f'No configuration found for "{configuration_name}" environment.'
         )
+    
     # Create the application using the "create_app" factory function created above.
     app = create_app(configuration_name)
-    # Start/Run the application.
-    app.run()
+    app.run()  # Start/Run the application.
