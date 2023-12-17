@@ -39,6 +39,13 @@
 
     <a href="{{url_for('logout')}}" class="logout-btn">Logout</a>
 </section>
+<section>
+    <div>
+        <form action="{{ url_for('post_item_listing') }}" method="post">
+            <button type="submit">Upload Item Listing</button>
+        </form>
+    </div>
+</section>
 
 </body>
 </html>
