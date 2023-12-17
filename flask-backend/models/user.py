@@ -20,8 +20,8 @@ class user(db.Model, UserMixin):
     
     @hybrid_property
     def password(self):
-        return self._password
+        return self.password
 
     @password.setter
     def password(self, plaintext):
-        self._password = pbkdf2_sha256.hash(plaintext)
+        self.password = pbkdf2_sha256.hash(plaintext)

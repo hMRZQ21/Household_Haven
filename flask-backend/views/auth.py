@@ -14,8 +14,7 @@ def register():
     # Validate that the client provided all required fields.
     required_fields = ["name", "email", "password", "street", "city", "state", "zipcode", "usertype"]
     for field in required_fields:
-        # If a required field is missing, return a 400 (Bad Request) HTTP
-        # Status Code to clients, signifying that we received a bad request.
+        # If a required field is missing, return a 400 (Bad Request) to clients.
         if field not in user_data:
             flask.abort(400, description=f"{field} cannot be blank.")
 
@@ -83,8 +82,7 @@ def login():
     # Validate that the client provided all required fields.
     required_fields = ["email", "password"]
     for field in required_fields:
-        # If a required field is missing, return a 400 (Bad Request) HTTP
-        # Status Code to clients, signifying that we received a bad request.
+        # If a required field is missing, return a 400 (Bad Request) to clients.
         if field not in login_data:
             flask.abort(400, description=f"{field} cannot be blank.")
 
