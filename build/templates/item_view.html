@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile - E-Commerce</title>
+    <title>Item View Page</title>
  <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
 </head>
 <body>
@@ -32,12 +32,23 @@
         <b>Stock:</b> {{item.stock}}
     </div>
 
-    <div>
-        <nav>
-            
-            <a href="{{url_for('cart_page')}}">Add to Cart</a>
-        </nav>
+    <div align="center">
+        <form action="/add_to_cart/{{item.productID}}" method="post">
+            <input type="submit", name="add_to_cart" value="Add to Cart">
+        </form>
     </div>
+
+</section>
+
+<section>
+
+    <form action="/post_review" method="post">
+        <h3>Submit a Review:</h3>
+
+        <textarea name = "review"></textarea>
+
+        <input type="submit" value="Submit">
+    </form>
 
 </section>
 

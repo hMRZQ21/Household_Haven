@@ -119,7 +119,7 @@ DROP table if exists "cartItems";
 create table if not exists "cartItems" (
 	"cartItemID" serial,
 	"cartID" int,
-	"productID" int,
+	"productID" int UNIQUE,
 	"quantity" int not NULL default 1,
 	primary key ("cartItemID"),
 	foreign key ("cartID")references "cart" ("cartID") on update cascade,

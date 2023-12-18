@@ -148,7 +148,8 @@ def login():
     # return redirect(request_uri)
     # # valid_creds = True
 
-    if current_user.is_authenticated: return redirect(url_for('profile'))
+    if current_user.is_authenticated:
+        return redirect(url_for('profile'))
 
     elif request.method == 'POST':
         email = request.form.get('email').lower()
@@ -236,7 +237,8 @@ def profile():
 @login_required
 def post_item_listing():
 
-    if current_user.usertype == 0: return redirect(url_for('profile'))
+    if current_user.usertype == 0:
+        return redirect(url_for('profile'))
     
     elif request.method == 'POST':
         item_name = request.form.get('item_name')
@@ -252,15 +254,12 @@ def post_item_listing():
         if float(item_price) < 5:
             alert_user = "Item price must be at least $5."
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
-        
         if float(item_price) > 9999:
             alert_user = "Price is over the allowed limit of $9999.99."
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
-        
         if len(item_name) > 100:
             alert_user = "Item name is too long!"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
-        
         if len(item_desc) > 300:
             alert_user = "Item description is too long!"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
@@ -356,18 +355,35 @@ def browse():
     
     else: return render_template("browse.html")
     
-@app.route('/browse/<int:product_ID>', methods = ['GET','POST'])
+@app.route('/browse/<int:product_ID>', methods = ['GET'])
 def item_view(product_ID):
     item = product.query.filter_by(productID=product_ID).one()
     return render_template('item_view.html', item=item)
+
+@app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
+def add_to_cart(product_ID):
+
+    check = cart.query.filter_by(userID=current_user.userID).one().cartID
+    print(check)
+
+    create_cartitem = cartItems(cartItemID = None, 
+        cartID = cart.query.filter_by(userID=current_user.userID).one().cartID,
+        productID = product_ID,
+        quantity = None
+    )
+
+    db.session.add(create_cartitem)
+    db.session.commit()
+    
+    return redirect(url_for('browse'))
 
 @app.route('/cart_page', methods = ['GET','POST'])
 def cart_page():
     user_id = current_user.userID
     cart_ = cart.query.filter_by(userID=user_id).one()
     cart_items = cartItems.query.filter_by(cartID=cart_.cartID).all()
-    print(cart_.cartID, '\n')
-    print(cart_items, '\n')
+    #print(cart_.cartID, '\n')
+    #print(cart_items, '\n')
     return render_template('cart.html', data=cart_items)
 
 # @app.route('/add_to_cart/<int:product_ID>', methods=['GET'])

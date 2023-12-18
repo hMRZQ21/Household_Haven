@@ -84,7 +84,7 @@ class cartItems(db.Model, UserMixin):
 
     cartItemID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cartID = db.Column(db.Integer, db.ForeignKey('cart.cartID'), nullable=False)
-    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
+    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False, unique=True)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
 class payment(db.Model, UserMixin):
