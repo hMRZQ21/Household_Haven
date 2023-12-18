@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <h1>Cart</h1>
+</header>
+<nav>
+    <a href="{{url_for('home')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="{{url_for('cart_page')}}">Cart</a>
+    <a href="#">Contact Us</a>
+</nav>
+
+{% if data %}
+    <section>
+        {% for item in data %}
+            <div>
+                <b>Item Name: </b>{{ item.itemName }}<br>
+                <b>Description:</b> {{ item.itemDesc }}<br>
+                <b>Price:</b> ${{ item.price }}<br>
+                <b>Stock:</b> {{ item.stock }}<br>
+
+                <form method="post" action="{{ url_for('remove_from_cart', product_id=item.productID) }}">
+                    <label for="quantity">Quantity:</label>
+                    <select name="quantity" id="quantity">
+                        {% for quantity in range(1, item.stock + 1) %}
+                            <option value="{{ quantity }}">{{ quantity }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Remove">
+                </form>
+            </div>
+        {% endfor %}
+    </section>
+
+{% else %}
+    <div style="text-align: center;">
+        <p>Your cart is empty.</p>
+    </div>
+{% endif %}
+    
+</body>
+</html>
