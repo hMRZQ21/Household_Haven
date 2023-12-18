@@ -28,7 +28,7 @@ class DevelopmentConfiguration(Configuration):
     # A secret key that will be used for securely signing the session cookie.
     # Do not reveal the secret key when committing code.
     # https://flask.palletsprojects.com/en/2.2.x/config/#SECRET_KEY
-    SECRET_KEY = os.environ.get("SECRET_KEY")
+    SECRET_KEY = 'secretkey'
 
     # The database connection URI. For additional details please check the following:
     # https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/config/

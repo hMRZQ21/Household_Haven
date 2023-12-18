@@ -4,8 +4,6 @@ import { useAuth } from "../context/AuthContext";
 
 function HomePage() {
   const auth = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
   const [error, setError] = useState(false);
 
   // const from = location.state?.from?.pathname || "/";
@@ -26,7 +24,6 @@ function HomePage() {
       </header>
       <main>
         <p>Hello {auth.user.name}! Welcome to my simple React home page! This is a basic example of a React project.</p>
-        <img src="https://via.placeholder.com/300" alt="Placeholder" />
       </main>
     </div>
   );

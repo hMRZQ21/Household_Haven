@@ -73,6 +73,8 @@ def confirm_login():
         "zipcode": cur_user.zipcode,
         "usertype": cur_user.usertype,
     })
+    #response = {'message': 'NO YOU, World!'}
+    #return flask.json.jsonify(response)
 
 @blueprint.route("/login", methods=["POST"])
 def login():

@@ -1,6 +1,7 @@
 import os, typing
 import flask, login_manager
 import database, configuration
+from flask_cors import CORS
 
 from views.auth import blueprint as auth_blueprint
 
@@ -82,6 +83,13 @@ def create_app(configuration_name: configuration.ConfigurationName) -> flask.app
     # If strict_slashes is enabled (default), visiting a branch URL without a
     # trailing slash will redirect to the URL with a slash appended.
     app.url_map.strict_slashes = False
+
+    try: # Check if the connection is successful
+        with app.app_context(): database.db.engine.connect()
+        print("Connected to the database successfully!")
+        
+    except Exception as e:
+        print(f"Failed to connect to the database. Error: {e}")
 
     # Load the "auth" routes onto the Flask Application. In loading the
     # routes, requests starting with "/auth" will be forwarded to the "auth_blueprint."
@@ -305,4 +313,5 @@ if __name__ == '__main__':
     
     # Create the application using the "create_app" factory function created above.
     app = create_app(configuration_name)
+    CORS(app)
     app.run()  # Start/Run the application.

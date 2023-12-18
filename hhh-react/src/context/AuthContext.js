@@ -9,7 +9,7 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkIfUserIsLoggedIn() {
       try {
-        let response = await fetch("/auth/login");
+        let response = await fetch("http://127.0.0.1:5000/auth/login");
 
         if (!response.ok) {
           throw new Error("Unauthenticated");
@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    let response = await fetch("/auth/login", {
+    let response = await fetch("http://127.0.0.1:5000/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
       headers: {
@@ -49,7 +49,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const register = async (name, email, password, street, city, state, zipcode, usertype) => {
-    let response = await fetch("/auth/register", {
+    let response = await fetch("http://127.0.0.1:5000/auth/register", {
       method: "POST",
       body: JSON.stringify({
         name,
@@ -76,21 +76,26 @@ const AuthProvider = ({ children }) => {
     return loggedInUser;
   };
 
-  const signout = async () => {
-    let response = await fetch("/auth/logout", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error("Logout Failed");
+  const logout = async () => {
+    try {
+      let response = await fetch("http://127.0.0.1:5000/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Logout Failed");
+      }
+
+      const body = await response.json();
+      setUser(false);
+
+      return body;
+    } catch (error) {
+      console.error("Logout error:", error);
+      throw error;
     }
-
-    const body = await response.json();
-    setUser(false);
-
-    return body;
   };
 
   return (
@@ -98,7 +103,7 @@ const AuthProvider = ({ children }) => {
       value={{
         login,
         register,
-        signout,
+        logout,
         isAuthenticated: user ? true : false,
         user,
       }}

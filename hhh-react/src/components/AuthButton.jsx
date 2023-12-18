@@ -20,7 +20,7 @@ const AuthButton = () => {
   }
 
   const logout = () => {
-    auth.signout().then(() => navigate("/"));
+    auth.logout().then(() => navigate("/"));
   };
 
   return (
