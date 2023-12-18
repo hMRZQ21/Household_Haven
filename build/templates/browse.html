@@ -23,12 +23,51 @@
 
     <div class="profile-info">
         <div>
+
+            <form method="post">
+                <h2>Select the category</h2>
+                
+                <label for="category">Category</label>
+                    <select name="category" id="category">
+                        <option value="0">Furniture</option>
+                        <option value="1">Appliances</option>
+                        <option value="2">Home Decor</option>
+                        <option value="3">Home Office</option>
+                        <option value="4">Outdoor and Gardening</option>
+                        <option value="5">Cleaning Supplies</option>
+                        <option value="6">Kitchen</option>
+                    </select>
+            
+                <input type="submit" value="Submit">
+
+            </form>
+
             
         </div>
+
+        
+       
        
     </div>
 
 </section>
+
+
+
+    {% for items in data %}
+        <section> 
+            <div>
+                <b>Item Name: </b>{{items.itemName}}
+        <br>
+                <b>Description:</b> {{items.itemDesc}}
+        <br>
+                <b>Price:</b> ${{items.price}}
+        <br>
+                <b>Stock:</b> {{items.stock}}
+            </div>
+        </section>
+    {% endfor %}
+
 
 </body>
 </html>

@@ -13,8 +13,8 @@ Create table if not exists "user" (
 	PRIMARY KEY ("userID")
 );
 
-INSERT INTO "user" ("name", "email", "password", "address", "city", "state", "zipcode", "usertype")
-VALUES ('hi', 'something@example.com', '123', 'WEIRD ST', 'NYC', 'NY', 10001, 0);
+-- INSERT INTO "user" ("name", "email", "password", "address", "city", "state", "zipcode", "usertype")
+-- VALUES ('hi', 'something@example.com', '123', 'WEIRD ST', 'NYC', 'NY', 10001, 0);
 
 -- SELECT * FROM "user"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
@@ -30,8 +30,8 @@ create table if not exists "order"(
 	foreign key ("userID") references "user" ("userID") on Update cascade
 );
 
-insert into "order" ("userID", "status", "totalAmount") 
-values (1, 'Processing', 420.69);
+-- insert into "order" ("userID", "status", "totalAmount") 
+-- values (1, 'Processing', 420.69);
 -- SELECT * FROM "order"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -46,9 +46,9 @@ CREATE table if not exists "product" (
 	Primary Key ("productID"),
 	Foreign Key ("sellerID") References "user" ("userID") ON update CASCADE);
 	
-Insert into "product" ("sellerID", "itemName", "itemDesc", "price", "stock")
-values (1, 'ur mom', 'big chungus', 69.69, 420),
-	   (1, 'ur dad', 'smol chungus', 12.12, 69);
+-- Insert into "product" ("sellerID", "itemName", "itemDesc", "price", "stock")
+-- values (1, 'ur mom', 'big chungus', 69.69, 420),
+-- 	   (1, 'ur dad', 'smol chungus', 12.12, 69);
 -- SELECT * FROM "product"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -65,8 +65,8 @@ create table if not exists "review" (
 	Foreign Key ("productID") References "product" ("productID") on UPDATE cascade
 );
 
-insert into "review" ("userID", "productID", "rating", "comment") 
-values (1, 1, 1.2, 'she ate all my carrots');
+-- insert into "review" ("userID", "productID", "rating", "comment") 
+-- values (1, 1, 1.2, 'she ate all my carrots');
 -- SELECT * FROM "review"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -81,8 +81,8 @@ create table if not exists "payment" (
 	foreign key ("orderID") references "order" ("orderID") on update cascade
 );
 
-insert into "payment" ("orderID", "paymentMethod", "amount", "status")
-values(1, 'MasterCard', 420.69, 'Fulfilled');
+-- insert into "payment" ("orderID", "paymentMethod", "amount", "status")
+-- values(1, 'MasterCard', 420.69, 'Fulfilled');
 -- SELECT * FROM "payment"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -97,8 +97,8 @@ create table if not exists "orderItem"(
 	foreign key ("productID") references "product" ("productID") on update cascade
 );
 
-insert into "orderItem" ("orderID", "productID", "quantity")
-values (1, 1, 300);
+-- insert into "orderItem" ("orderID", "productID", "quantity")
+-- values (1, 1, 300);
 -- SELECT * FROM "orderItem"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -110,8 +110,8 @@ create table if not exists "cart" (
 	foreign key ("userID") references "user" ("userID") on update cascade
 );
 
-insert into "cart" ("userID") values (1);
-insert into "cart" ("userID") values (1);
+-- insert into "cart" ("userID") values (1);
+-- insert into "cart" ("userID") values (1);
 -- SELECT * FROM "cart"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -127,8 +127,8 @@ create table if not exists "cartItems" (
  );
  
  
- insert into "cartItems" ("cartID", "productID", "quantity")
- values (1, 1, 99), (1, 1, 5);
+--  insert into "cartItems" ("cartID", "productID", "quantity")
+--  values (1, 1, 99), (1, 1, 5);
 -- SELECT * FROM "cartItems"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
 
@@ -142,9 +142,9 @@ CREATE table if not exists "category"(
 	Foreign Key ("parentCategoryID") References "category" ("categoryID")
 );
 
-INSERT INTO "category" ("parentCategoryID", "name", "desc") 
-values (1, 'chairs', 'something to sit on'),
-	   (1, 'stools', 'a chair with no backrest'),
-	   (2, 'table', 'somewhere to place goods');
+-- INSERT INTO "category" ("parentCategoryID", "name", "desc") 
+-- values (1, 'chairs', 'something to sit on'),
+-- 	   (1, 'stools', 'a chair with no backrest'),
+-- 	   (2, 'table', 'somewhere to place goods');
 -- SELECT * FROM "category"
 -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 

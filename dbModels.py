@@ -37,6 +37,7 @@ class product(db.Model, UserMixin):
     itemDesc = db.Column(db.String(300))
     price = db.Column(db.Float(6,2), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
+    category = db.Column(db.Integer, nullable=False)
 
 class review(db.Model, UserMixin):
     __tablename__ = 'review'
@@ -52,7 +53,6 @@ class category(db.Model):
     __tablename__ = 'category'
 
     categoryID = db.Column(db.Integer, primary_key=True)
-    parentCategoryID = db.Column(db.Integer, db.ForeignKey('category.categoryID'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     desc = db.Column(db.String(300))
 

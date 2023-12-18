@@ -243,6 +243,7 @@ def post_item_listing():
         item_desc = request.form.get('item_desc')
         item_price = request.form.get('item_price')
         item_stock = request.form.get('item_stock')
+        category = request.form.get('category')
 
         if item_price == None or item_desc == None or item_price == None or item_stock == None:
             alert_user = "Please fill out all of the fields"
@@ -266,7 +267,8 @@ def post_item_listing():
             itemName = item_name,
             itemDesc = item_desc,
             price = float(item_price),
-            stock = int(item_stock)
+            stock = int(item_stock),
+            category = int(category)
         )
 
         db.session.add(create_product)
@@ -326,7 +328,12 @@ def edit_prof():
 
 @app.route('/browse', methods = ['GET','POST'])
 def browse():
-    return render_template('browse.html')
+    if request.method == "POST":
+        category = int(request.form.get("category"))
+        data = product.query.filter_by(category=category)
+        return render_template('browse.html', data=data)
+    else:
+        return render_template("browse.html")
 
 if __name__ == '__main__': 
     app.run(debug=True)
