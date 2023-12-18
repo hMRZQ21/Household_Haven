@@ -362,10 +362,6 @@ def item_view(product_ID):
 
 @app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
 def add_to_cart(product_ID):
-
-    check = cart.query.filter_by(userID=current_user.userID).one().cartID
-    print(check)
-
     create_cartitem = cartItems(cartItemID = None, 
         cartID = cart.query.filter_by(userID=current_user.userID).one().cartID,
         productID = product_ID,
@@ -379,21 +375,14 @@ def add_to_cart(product_ID):
 
 @app.route('/cart_page', methods = ['GET','POST'])
 def cart_page():
-    user_id = current_user.userID
-    cart_ = cart.query.filter_by(userID=user_id).one()
+    cart_ = cart.query.filter_by(userID=current_user.userID).one()
     cart_items = cartItems.query.filter_by(cartID=cart_.cartID).all()
-    #print(cart_.cartID, '\n')
-    #print(cart_items, '\n')
-    return render_template('cart.html', data=cart_items)
-
-# @app.route('/add_to_cart/<int:product_ID>', methods=['GET'])
-# def add_to_cart(product_id):
-#     if 'cart' not in session:
-#         session ['cart'] = []
-#         return redirect(url_for('cart_page'))
     
-#     session['cart'].append(product_id)
-#     return redirect(url_for('cart_page'))
+    productIDs = []
+    for item in cart_items: productIDs.append(item.productID)
+    cart_products = product.query.filter(product.productID.in_(productIDs)).all()
+    # print(cart_products)
+    return render_template('cart.html', data=cart_products)
 
 if __name__ == '__main__': 
     app.run(debug=True)
