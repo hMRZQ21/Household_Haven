@@ -351,6 +351,7 @@ def browse():
     if request.method == "POST":
         category = int(request.form.get("category"))
         data = product.query.filter_by(category=category)
+        print(data)
         return render_template('browse.html', data=data)
     
     else: return render_template("browse.html")
@@ -362,6 +363,18 @@ def item_view(product_ID):
 
 @app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
 def add_to_cart(product_ID):
+
+    # check = cart.query.filter_by(userID=current_user.userID).one().cartID
+    # print(check)
+
+    user_cart = cart.query.filter_by(userID=current_user.userID).first()
+    existing_cart_item = cartItems.query.filter_by(cartID=user_cart.cartID, productID=product_ID).first()
+    
+    item = product.query.filter_by(productID=product_ID).first()
+    if existing_cart_item:
+        error_message = 'Error: This item is already in your cart.'
+        return render_template('item_view.html', item=item, error_message=error_message)
+
     create_cartitem = cartItems(cartItemID = None, 
         cartID = cart.query.filter_by(userID=current_user.userID).one().cartID,
         productID = product_ID,
@@ -371,7 +384,7 @@ def add_to_cart(product_ID):
     db.session.add(create_cartitem)
     db.session.commit()
     
-    return redirect(url_for('browse'))
+    return render_template('item_view.html')
 
 @app.route('/cart_page', methods = ['GET','POST'])
 def cart_page():

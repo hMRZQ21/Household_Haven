@@ -34,15 +34,18 @@
 
     <div align="center">
         <form action="/add_to_cart/{{item.productID}}" method="post">
-            <input type="submit", name="add_to_cart" value="Add to Cart">
+            <input type="submit" name="add_to_cart" value="Add to Cart">
         </form>
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
     </div>
 
 </section>
 
 <section>
 
-    <form action="/post_review" method="post">
+    <form action="/post_review/{{item.productID}}" method="post">
         <h3>Submit a Review:</h3>
 
         <textarea name = "review"></textarea>
