@@ -4,12 +4,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LOGIN_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user,current_user
 from sqlalchemy import ForeignKey
 from flask_bcrypt import Bcrypt
-from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment, category
+from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment#, category
 from urllib.parse import quote_plus, urlencode
 from dotenv import load_dotenv
 #from oauthlib.oauth2 import WebApplicationClient
 import os, json, requests
-#stripe
+import stripe
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,14 +20,16 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST = os.getenv('DB_HOST')
 DB_NAME = os.getenv('DB_NAME')
 
-#STRIPE_SECRET_KEY= os.getenv('STRIPE_SECRET_KEY')
-#STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+stripe_keys={
+    "secret_key": os.getenv('STRIPE_SECRET_KEY'),
+    "publishable_key": os.getenv('STRIPE_PUBLISHABLE_KEY'),
+}
+
+stripe.api_key = stripe_keys["secret_key"]
 
 #GOOGLE_CLIENT_ID = os.getenv('google_clientID')
 #GOOGLE_CLIENT_SECRET = os.getenv('google_client_secret')
 #GOOGLE_DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration'
-
-#stripe.api_key = STRIPE_SECRET_KEY
 
 conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
@@ -252,14 +254,14 @@ def post_item_listing():
         if float(item_price) < 5:
             alert_user = "Item price must be at least $5."
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
-        if float(item_price) > 9999.99:
+        if float(item_price) > 9999:
             alert_user = "Price is over the allowed limit of $9999.99."
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
         if len(item_name) > 100:
-            alert_user = "Item Name is too long!"
+            alert_user = "Item name is too long!"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
         if len(item_desc) > 300:
-            alert_user = "Item Name is too long!"
+            alert_user = "Item description is too long!"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
         
         create_product = product(productID = None, 
@@ -273,6 +275,24 @@ def post_item_listing():
 
         db.session.add(create_product)
         db.session.commit()
+
+        stripe_product = stripe.Product.create(
+            name=create_product.itemName,
+            description=create_product.itemDesc,
+            id=create_product.productID
+            # Add more attributes as needed
+        )
+
+        stripe_price = stripe.Price.create(
+            product=stripe_product.id,
+            unit_amount=int(create_product.price) * 100,  # Stripe uses cents, so convert dollars to cents
+            currency='usd',  # Set the currency code accordingly
+            billing_scheme="per_unit"
+        )
+
+        # Sanity Check
+        print("Product created in Stripe. Product ID:", stripe_product.id)
+        print("Price created in Stripe. Price ID:", stripe_price.id)
 
     return redirect(url_for('profile'))
 
@@ -334,6 +354,15 @@ def browse():
         return render_template('browse.html', data=data)
     else:
         return render_template("browse.html")
+    
+@app.route('/browse/<int:product_ID>', methods = ['GET','POST'])
+def item_view(product_ID):
+    item = product.query.filter_by(productID=product_ID).one()
+    return render_template('item_view.html', item=item)
+
+@app.route('/cart', methods = ['GET','POST'])
+def cart():
+    return render_template('cart.html')
 
 if __name__ == '__main__': 
     app.run(debug=True)

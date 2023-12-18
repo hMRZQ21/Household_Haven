@@ -5,6 +5,21 @@ body {
     background-color: #f4f4f4;
 }
 
+
+#viewpage_button1 {
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px;
+    width: 70%; /* Set width to 80% */
+}
+
+#viewpage_button2 {
+    display: inline-block; /* Use display: inline-block to align with viewpage_button1 */
+    width: 25%; /* Set width to 20% */
+    padding-left: 10px; /* Add some left padding for separation */
+    margin: auto; /* Center the button within its available space */
+}
+
 header {
     background-color: #333;
     color: #fff;

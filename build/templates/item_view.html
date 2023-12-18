@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - E-Commerce</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <h1>Browse Items</h1>
+</header>
+<nav>
+    <a href="{{url_for('home')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="#">Cart</a>
+    <a href="#">Contact Us</a>
+</nav>
+<section>
+    <center><h2>{{item.itemName}}</h2></center>
+    <hr>
+    <h3>Information:</h3>
+    <div>
+        <b>Item Name: </b>{{item.itemName}}
+    <br><br>
+        <b>Description:</b> {{item.itemDesc}}
+    <br><br>
+        <b>Price:</b> ${{item.price}}
+    <br><br>
+        <b>Stock:</b> {{item.stock}}
+    </div>
+
+    <div>
+        <nav>
+            
+            <a href="{{url_for('cart')}}">Add to Cart</a>
+        </nav>
+    </div>
+
+</section>
+
+</body>
+</html>

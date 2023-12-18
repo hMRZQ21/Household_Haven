@@ -56,7 +56,7 @@
 
     {% for items in data %}
         <section> 
-            <div>
+            <div id="viewpage_button1">
                 <b>Item Name: </b>{{items.itemName}}
         <br>
                 <b>Description:</b> {{items.itemDesc}}
@@ -64,6 +64,11 @@
                 <b>Price:</b> ${{items.price}}
         <br>
                 <b>Stock:</b> {{items.stock}}
+            </div>
+            <div id="viewpage_button2">
+                <nav>
+                    <a href="{{url_for('item_view', product_ID=items['productID'])}}">View Item</a>
+                </nav>
             </div>
         </section>
     {% endfor %}

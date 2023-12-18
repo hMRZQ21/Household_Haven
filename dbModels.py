@@ -35,7 +35,7 @@ class product(db.Model, UserMixin):
     sellerID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
     itemName = db.Column(db.String(100), nullable=False)
     itemDesc = db.Column(db.String(300))
-    price = db.Column(db.Float(6,2), nullable=False)
+    price = db.Column(db.Float(4,0), nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     category = db.Column(db.Integer, nullable=False)
 
@@ -49,12 +49,12 @@ class review(db.Model, UserMixin):
     rating = db.Column(db.Float(2,1), nullable=False)
     comment = db.Column(db.String(250))
 
-class category(db.Model):
-    __tablename__ = 'category'
+# class category(db.Model):
+#     __tablename__ = 'category'
 
-    categoryID = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    desc = db.Column(db.String(300))
+#     categoryID = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(100), nullable=False)
+#     desc = db.Column(db.String(300))
 
 class order(db.Model, UserMixin):
     __tablename__ = 'order'
@@ -63,7 +63,7 @@ class order(db.Model, UserMixin):
     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
     orderDate = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     status = db.Column(db.String(15))
-    totalAmount = db.Column(db.Float(6,2))
+    totalAmount = db.Column(db.Float(5,0))
 
 class orderItem(db.Model, UserMixin):
     __tablename__ = 'orderItem'
@@ -93,5 +93,5 @@ class payment(db.Model, UserMixin):
     transactionID = db.Column(db.Integer, primary_key=True, autoincrement=True)
     orderID = db.Column(db.Integer, db.ForeignKey('order.orderID'), nullable=False)
     paymentMethod = db.Column(db.String(100), nullable=False)
-    amount = db.Column(db.Float(6,2), nullable=False)
+    amount = db.Column(db.Float(5,0), nullable=False)
     status = db.Column(db.String(100), nullable=False)
