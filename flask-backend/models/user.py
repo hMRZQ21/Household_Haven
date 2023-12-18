@@ -18,10 +18,10 @@ class user(db.Model, UserMixin):
 
     def get_id(self): return str(self.userID)
     
-    @hybrid_property
-    def password(self):
-        return self.password
+    # @hybrid_property
+    # def password(self):
+    #     return self.password
 
-    @password.setter
-    def password(self, plaintext):
-        self.password = pbkdf2_sha256.hash(plaintext)
+    # @password.setter
+    # def password(self, plaintext):
+    #     self.password = pbkdf2_sha256.hash(plaintext)

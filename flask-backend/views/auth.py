@@ -121,6 +121,7 @@ def login():
 def logout():
     print("login recognized")
     flask_login.logout_user()
+    print("logout successful?")
     return {}
 
 @login_manager.login_manager.user_loader
