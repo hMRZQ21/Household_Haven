@@ -80,6 +80,7 @@ def confirm_login():
 def login():
     # Parse the JSON data in the request's body.
     login_data = flask.request.get_json()
+    print("login_data recieved")
 
     # Validate that the client provided all required fields.
     required_fields = ["email", "password"]
@@ -88,13 +89,19 @@ def login():
         if field not in login_data:
             flask.abort(400, description=f"{field} cannot be blank.")
 
+    print("required fields recieved")
+
     cur_user = database.db.session.query(user).filter_by(email=login_data["email"]).one()
     if not cur_user: 
         flask.abort(401, description=f"Incorrect email or password.")
     
-    is_correct_password = pbkdf2_sha256.verify(login_data["password"], cur_user.password)
-    if not is_correct_password:
+    print("email recognized")
+    
+    #is_correct_password = pbkdf2_sha256.verify(login_data["password"], cur_user.password)
+    if login_data["password"] != cur_user.password:
         flask.abort(401, description=f"Incorrect email or password.")
+    
+    print("password recognized")
 
     # https://flask-login.readthedocs.io/en/latest/
     flask_login.login_user(cur_user)
@@ -112,6 +119,7 @@ def login():
 @blueprint.route("/logout", methods=["POST"])
 @flask_login.login_required
 def logout():
+    print("login recognized")
     flask_login.logout_user()
     return {}
 

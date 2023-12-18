@@ -63,6 +63,7 @@ def create_app(configuration_name: configuration.ConfigurationName) -> flask.app
 
     # Initialize the Flask Application.
     app = flask.Flask(__name__)
+    CORS(app)
 
     # Load the configuration pertaining to the environment you're in
     # e.g., development, production, or testing.
@@ -313,5 +314,4 @@ if __name__ == '__main__':
     
     # Create the application using the "create_app" factory function created above.
     app = create_app(configuration_name)
-    CORS(app)
     app.run()  # Start/Run the application.
