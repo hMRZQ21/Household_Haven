@@ -121,6 +121,8 @@ def register():
             db.session.add(create_cart)
             db.session.commit()
 
+            login_user(create_user)
+
             return redirect(url_for('index'))
         
         else:
@@ -373,6 +375,7 @@ def item_view(product_ID):
     return render_template('item_view.html', item=item, reviews=reviews)
 
 @app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
+@login_required
 def add_to_cart(product_ID):
 
     # check = cart.query.filter_by(userID=current_user.userID).one().cartID
@@ -382,9 +385,18 @@ def add_to_cart(product_ID):
     existing_cart_item = cartItems.query.filter_by(cartID=user_cart.cartID, productID=product_ID).first()
     
     item = product.query.filter_by(productID=product_ID).first()
+
+    reviews = (
+        review.query
+        .filter_by(productID=product_ID)
+        .join(review.user)  # Join with the 'user' relationship
+        .options(joinedload(review.user))  # Load the 'user' relationship
+        .all()
+    )
+
     if existing_cart_item:
         error_message = 'Error: This item is already in your cart.'
-        return render_template('item_view.html', item=item, error_message=error_message)
+        return render_template('item_view.html', item=item, reviews=reviews, error_message=error_message)
 
     create_cartitem = cartItems(cartItemID = None, 
         cartID = cart.query.filter_by(userID=current_user.userID).one().cartID,
@@ -397,9 +409,10 @@ def add_to_cart(product_ID):
 
     #success_message = 'Item added to cart!'
     
-    return render_template('item_view.html', item=item)
+    return render_template('item_view.html', item=item, reviews=reviews)
 
 @app.route('/post_review/<int:product_ID>', methods = ['POST'])
+@login_required
 def post_review(product_ID):
 
     # check = cart.query.filter_by(userID=current_user.userID).one().cartID
@@ -410,17 +423,26 @@ def post_review(product_ID):
     existing_user_review = review.query.filter_by(userID=current_user.userID, productID=product_ID).first()
     
     item = product.query.filter_by(productID=product_ID).first()
+
+    reviews = (
+        review.query
+        .filter_by(productID=product_ID)
+        .join(review.user)  # Join with the 'user' relationship
+        .options(joinedload(review.user))  # Load the 'user' relationship
+        .all()
+    )
+
     if seller_user_flag:
         alert_user = 'Error: You cannot review your own item!'
-        return render_template('item_view.html', item=item, error_message=alert_user)
+        return render_template('item_view.html', item=item, reviews=reviews, error_message=alert_user)
     if existing_user_review:
         alert_user = 'Error: You have already posted a review for this item!'
-        return render_template('item_view.html', item=item, error_message=alert_user)
+        return render_template('item_view.html', item=item, reviews=reviews, error_message=alert_user)
     
     comment = request.form.get('review')
     if len(comment) > 250:
         alert_user = "Item description is too long!"
-        return render_template('item_view.html', item=item, error_message=alert_user)
+        return render_template('item_view.html', item=item, reviews=reviews, error_message=alert_user)
     
     rating = int(request.form.get('rate'))
 
@@ -435,9 +457,10 @@ def post_review(product_ID):
     db.session.add(create_review)
     db.session.commit()
     
-    return render_template('item_view.html', item=item)
+    return render_template('item_view.html', item=item, reviews=reviews)
 
 @app.route('/cart_page', methods = ['GET','POST'])
+@login_required
 def cart_page():
     cart_ = cart.query.filter_by(userID=current_user.userID).one()
     cart_items = cartItems.query.filter_by(cartID=cart_.cartID).all()
@@ -453,6 +476,7 @@ def contact():
     return render_template('contact.html')
 
 @app.route('/removeItem', methods = ['GET', 'POST'])
+@login_required
 def removeItem():
     pass
 
