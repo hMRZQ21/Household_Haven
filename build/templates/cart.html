@@ -34,35 +34,36 @@
     
         {% for item in data %}
         <section>
-        <div class="float-container2">
-            <div id="float-child2">
-                {% for key, value in stripe_product_images.items() %}
-                    {% if key == item.productID %}
-                        <img src="{{value}}" , width="125", height="125">
-                    {% endif %}
-                {% endfor %}
+            <div class="float-container2">
+                <div id="float-child2">
+                    {% for key, value in stripe_product_images.items() %}
+                        {% if key == item.productID %}
+                            <img src="{{value}}" , width="125", height="125">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="float-child2">
+                    <p>
+                    <!-- <b>ItemId:</b> {{item.productID}}<br> -->
+                    <b>Item Name: </b>{{ item.itemName }}<br>
+                    <b>Description:</b> {{ item.itemDesc }}<br>
+                    <b>Price:</b> ${{ item.price }}<br>
+                    <b>Stock:</b> {{ item.stock }}<br>
+                    </p>
+                </div>
+                <div class="float-child2">
+                    <form method="post">
+                        <input type="hidden" name="del" value="{{item.productID}}">
+                        <input type="submit" class="logout-btn" value="Remove Item">
+                    </form>
+                </div>
             </div>
-            <div class="float-child2">
-                <p>
-                <!-- <b>ItemId:</b> {{item.productID}}<br> -->
-                <b>Item Name: </b>{{ item.itemName }}<br>
-                <b>Description:</b> {{ item.itemDesc }}<br>
-                <b>Price:</b> ${{ item.price }}<br>
-                <b>Stock:</b> {{ item.stock }}<br>
-                </p>
-            </div>
-            <div class="float-child2">
-                <form method="post">
-                    <input type="hidden" name="del" value="{{item.productID}}">
-                    <input type="submit" class="logout-btn" value="Remove Item">
-                </form>
-            </div>
-        </div>
-    </section>
+        </section>
         {% endfor %}
     
-        
-    
+        <form action="/create-checkout-session" method="POST">
+            <button type="submit" id="checkout-button">Checkout</button>
+        </form>
 
 {% else %}
     <div style="text-align: center;">

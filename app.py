@@ -38,6 +38,8 @@ print(conn)
 
 app = Flask(__name__, static_folder='build', template_folder='build/templates')
 
+DOMAIN = 'http://127.0.0.1:5000'
+
 # Configure the database connection URI. using the environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = conn
 
@@ -527,6 +529,37 @@ def cart_page():
         return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products)
     # print(cart_products)
     return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products)
+
+@app.route('/create-checkout-session', methods=['POST'])
+@login_required
+def create_checkout_session():
+    try:
+        checkout_session = stripe.checkout.Session.create(
+            line_items=[
+                {
+                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+                    'price': 'price_1OP4VeLf868Boeab5Zo0Vixb',
+                    'quantity': 1,
+                },
+            ],
+            mode='payment',
+            success_url=DOMAIN + '/contact_us',
+            cancel_url=DOMAIN + '/contact_us',
+        )
+    except Exception as e:
+        return str(e)
+
+    return redirect(checkout_session.url, code=303)
+
+@app.route("/success")
+@login_required
+def success():
+    return render_template('success.html')
+
+@app.route("/cancel")
+@login_required
+def cancel():
+    return render_template('cancel.html')
 
 @app.route("/contact_us")
 def contact():
