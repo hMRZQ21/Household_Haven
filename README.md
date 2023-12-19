@@ -9,9 +9,9 @@
 * Follow the instructions found on [Setup.txt](/setup.txt)
 
 # Team Members: 
-1. Anthony Zhu
-2. Hussam Marzooq
-3. Konrad Zielinski
+1. [Anthony Zhu](https://github.com/azhu000)
+2. [Hussam Marzooq](https://github.com/hMRZQ21)
+3. [Konrad Zielinski](https://github.com/konraziel)
 
 # What does the application do?
 * Digital marketplace platform for second-hand household goods 
