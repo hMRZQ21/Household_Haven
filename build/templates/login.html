@@ -8,6 +8,9 @@
 </head>
 <body>
     <form method="post">
+        <center>
+            <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png"></center>
+        </center>
         <h2>User Login</h2>
 
         <label for="email">Email:</label>
@@ -29,6 +32,11 @@
                 {{ alert_user }}
             </div>
         {% endif %}
+
+        <br><br><br>
+        <a href="{{ url_for('index') }}" class="login-btn">Back to Home</a>
+
     </form>
+
 </body>
 </html>

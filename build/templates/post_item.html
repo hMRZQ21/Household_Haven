@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Post Item</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <div class="float-container">
+        <div class = "float-child">
+    <p>
+        <a href="{{url_for('index')}}">
+         <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" , width="50", height="50">
+         
+        </a>
+        
+       </p></div>
+       <h1>Post Item Form</h1>
+    
+    </div>
+</header>
+<nav>
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="{{url_for('cart_page')}}">Cart</a>
+    <a href="{{url_for('contact')}}">Contact Us</a>
+</nav>
+<section>
+    <h2>Welcome, {{current_user.name}}!</h2>
+
+    <div class="post-item">
+        <div>
+            <h3>Submit a form to post an item you want to sell</h3>
+            
+            <form method="post">
+                <h2>Item Posting Form</h2>
+        
+                <div>
+                    <label for="item_name">Item Name:</label>
+                    <input type="text" id="item_name" name="item_name" required>
+
+                    <label for="item_desc">Item Description:</label>
+                    <textarea name = "item_desc"></textarea>
+        
+                    <label for="item_price">Purchasing Price:</label>
+                    <input type="item_price" id="item_price" name="item_price" required>
+
+                    <label for="item_stock">Item Stock:</label>
+                    <input type="item_stock" id="item_stock" name="item_stock" required>
+
+                    <label for="item_image">Item Image (Please input a valid url of the image you want for this item):</label>
+                    <input type="item_image" id="item_image" name="item_image" required>
+
+                    <label for="category">Category</label>
+                    <select name="category" id="category">
+                        <option value="0">Furniture</option>
+                        <option value="1">Appliances</option>
+                        <option value="2">Home Decor</option>
+                        <option value="3">Home Office</option>
+                        <option value="4">Outdoor and Gardening</option>
+                        <option value="5">Cleaning Supplies</option>
+                        <option value="6">Kitchen</option>
+                    </select>
+                </div>     
+
+                <div>
+                    <input type="submit" name="submit_item" value="Submit">
+                </div>
+
+                <div class="alert" role="alert">
+                    {% if alert_user %}
+                        <p style="color: red;">{{ alert_user }}</p>
+                    {% endif %}
+                </div>
+        </div>
+        
+    </div>
+
+    <!-- <a href="{{url_for('logout')}}" class="logout-btn">Logout</a> -->
+</section>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Edit Profile</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <div class="float-container">
+        <div class = "float-child">
+    <p>
+        <a href="{{url_for('index')}}">
+         <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" , width="50", height="50">
+         
+        </a>
+        
+       </p></div>
+       <h1>Edit Profile</h1>
+    
+    </div>
+</header>
+<nav>
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="{{url_for('cart_page')}}">Cart</a>
+    <a href="{{url_for('contact')}}">Contact Us</a>
+</nav>
+<section>
+    <h2>Welcome, {{current_user.name}}!</h2>
+
+    <div class="profile-info">
+        <div>
+            <h3>Edit your profile information</h3>
+            
+            <form method="post">    
+                <div>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name">
+        
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+        
+                    <label for="street">Street:</label>
+                    <input type="text" id="street" name="street">
+                    <br>
+                    <label for="city">City:</label>
+                    <br>
+                    <input type="text" id="city" name="city">
+                    
+            
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state">
+            
+                    <label for="zipcode">Zipcode:</label>
+                    <input type="text" id="zipcode" name="zipcode">
+                </div>     
+                    <br>
+                    <label for="current_password">Please enter your current password:</label>
+                    <input type="text" id="current_password" name="current_password" required>
+                    <br>
+                    <br>
+                    <input type="submit" value="Submit">
+                    <br>
+
+                {% if correct_pass == False %}
+                    <div class="alert" role="alert">
+                        <p style="color: red;">{{ alert_user }}</p>
+                    </div>
+                {% endif %}
+        </div>
+        
+    </div>
+
+    <!-- <a href="{{url_for('logout')}}" class="logout-btn">Logout</a> -->
+</section>
+
+</body>
+</html>

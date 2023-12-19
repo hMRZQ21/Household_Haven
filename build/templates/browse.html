@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Items Page</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <div class="float-container">
+        <div class = "float-child">
+    <p>
+        <a href="{{url_for('index')}}">
+         <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" , width="50", height="50">
+         
+        </a>
+        
+       </p></div>
+       <h1>Browse Items</h1>
+    
+    </div>
+</header>
+<nav>
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="{{url_for('cart_page')}}">Cart</a>
+    <a href="{{url_for('contact')}}">Contact Us</a>
+</nav>
+<section class="browse">
+    <center><h2>What kind of items are you looking for?</h2></center>
+
+    <div class="profile-info">
+        <div>
+
+            <form method="post">
+                <h2>Select the category</h2>
+                
+                <label for="category">Category</label>
+                    <select name="category" id="category">
+                        <option value="0">Furniture</option>
+                        <option value="1">Appliances</option>
+                        <option value="2">Home Decor</option>
+                        <option value="3">Home Office</option>
+                        <option value="4">Outdoor and Gardening</option>
+                        <option value="5">Cleaning Supplies</option>
+                        <option value="6">Kitchen</option>
+                    </select>
+            
+                <input type="submit" value="Search">
+
+            </form>     
+        </div>   
+    </div>
+</section>
+
+    {% for items in data %}
+        <section class="browse"> 
+            <div id="viewpage_image">
+                {% for key, value in stripe_product_images.items() %}
+                    {% if key == items.productID %}
+                        <img src="{{value}}" , width="125", height="125">
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div id="viewpage_button1">
+                <b>Item Name: </b>{{items.itemName}}
+        <br>
+                <b>Description:</b> {{items.itemDesc}}
+        <br>
+                <b>Price:</b> ${{items.price}}
+        <br>
+                <b>Stock:</b> {{items.stock}}
+            </div>
+            <div id="viewpage_button2">
+                <nav>
+                    <a href="{{url_for('item_view', product_ID=items['productID'])}}">View Item</a>
+                </nav>
+            </div>
+        </section>
+    {% endfor %}
+
+</body>
+</html>

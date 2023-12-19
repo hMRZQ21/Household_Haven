@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Item View Page</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <div class="float-container">
+        <div class = "float-child">
+    <p>
+        <a href="{{url_for('index')}}">
+         <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" , width="50", height="50">
+         
+        </a>
+        
+       </p></div>
+       <h1>Item View</h1>
+    
+    </div>
+</header>
+<nav>
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="{{url_for('cart_page')}}">Cart</a>
+    <a href="{{url_for('contact')}}">Contact Us</a>
+</nav>
+<section>
+    <center><h2>{{item.itemName}}</h2></center>
+    <img src="{{image}}", width="50%", height=auto>
+    <hr>
+    <h3>Information:</h3>
+    <div>
+        <b>Item Name: </b>{{item.itemName}}
+    <br><br>
+        <b>Description:</b> {{item.itemDesc}}
+    <br><br>
+        <b>Price:</b> ${{item.price}}
+    <br><br>
+        <form action="/add_to_cart/{{item.productID}}" method="post">
+            <b>Stock:</b> 
+            <select name="quantity" id="quantity">
+                {% for i in range(1, item.stock + 1) %}
+                    <option value="{{i}}">{{ i }}</option>
+                {% endfor %}
+            </select>
+            <div align="center">
+                <input type="submit" name="add_to_cart" value="Add to Cart">
+            </div>
+        </form>
+    </div>
+
+    <div align="center">
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+    </div>
+
+</section>
+
+<section>
+
+    <form action="/post_review/{{item.productID}}" method="post">
+        <h3>Submit a Review:</h3>
+
+        <!-- This code for 5 star rating is taken from https://codepen.io/hesguru/pen/BaybqXv -->
+        <div class="rate">
+            <input type="radio" id="star5" name="rate" value="5" />
+            <label for="star5" title="1 star">5 stars</label>
+            <input type="radio" id="star4" name="rate" value="4" />
+            <label for="star4" title="2 stars">4 stars</label>
+            <input type="radio" id="star3" name="rate" value="3" />
+            <label for="star3" title="3 stars">3 stars</label>
+            <input type="radio" id="star2" name="rate" value="2" />
+            <label for="star2" title="4 stars">2 stars</label>
+            <input type="radio" id="star1" name="rate" value="1" />
+            <label for="star1" title="5 stars">1 star</label>
+        </div>
+
+        <!-- Hidden input field to store the selected star rating -->
+        <input type="hidden" id="selectedRating" name="selectedRating" value="">
+
+        <textarea name = "review"></textarea>
+
+        <input type="submit" value="Submit" onclick="submitReview()">
+    </form>
+
+    <script>
+        function submitReview() {
+            // Get the selected star rating
+            var selectedRating = document.querySelector('input[name="rate"]:checked');
+
+            // Check if a star is selected
+            if (selectedRating) {
+                // Update the hidden input field with the selected rating
+                document.getElementById('selectedRating').value = selectedRating.value;
+
+                // Submit the form
+                document.getElementById('reviewForm').submit();
+            } else {
+                alert('Please select a star rating before submitting.');
+            }
+        }
+    </script>
+
+</section>
+
+<section>
+    <h3>Reviews for this item:</h3>
+
+    {% for review in reviews %}
+        <div>
+            <p><b>User:</b> {{ review.user.name }}</p>
+            <p><b>Rating:</b> {{ review.rating }} stars</p>
+            <p><b>Review:</b> {{ review.comment }}</p>
+        </div>
+        <hr>
+    {% endfor %}
+
+</section>
+
+</body>
+</html>

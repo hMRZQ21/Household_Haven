@@ -1,12 +1,14 @@
 Instructions to get started:
 
-We will be using python 3.x.x
+We will be using python 3.11.7
 
-0. create .env file for db connection like such:
-    DB_USERNAME=postgres
-    DB_PASSWORD=123
-    DB_HOST=localhost
-    DB_NAME=postgres
+0. create .env file with the following variables:
+    DB_USERNAME=
+    DB_PASSWORD=
+    DB_HOST=
+    DB_NAME=
+    STRIPE_PUBLISHABLE_KEY=
+    STRIPE_SECRET_KEY=
 
 1. install virtualenv
     pip3 install virtualenv
@@ -20,12 +22,9 @@ We will be using python 3.x.x
 
 3. Install required dependencies:
     "pip3 install -r ./requirements.txt"
-    "npm install node"
-    "npm install react"
 
 4. check environment dependencies:
     "pip list"
-    "npm list"
 
 4. Run the server
     "python3 ./app.py" or "flask run"

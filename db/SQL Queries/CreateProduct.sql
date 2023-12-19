@@ -7,6 +7,7 @@ CREATE table if not exists "product" (
 	"itemDesc" varchar(300),
 	"price" numeric(6,2) NOT NULL,
 	"stock" int,
+	"category" int,
 	Primary Key ("productID"),
 	Foreign Key ("sellerID") References "user" ("userID") ON update CASCADE);
 	

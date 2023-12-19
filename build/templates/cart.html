@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Page</title>
+ <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+</head>
+<body>
+
+<header>
+    <div class="float-container">
+        <div class = "float-child">
+    <p>
+        <a href="{{url_for('index')}}">
+         <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" , width="50", height="50">
+         
+        </a>
+        
+       </p></div>
+       <h1>Cart</h1>
+    
+    </div>
+</header>
+<nav>
+    <a href="{{url_for('index')}}">Home</a>
+    <a href="{{url_for('profile')}}">Profile</a>
+    <a href="{{url_for('browse')}}">Browse</a>
+    <a href="{{url_for('cart_page')}}">Cart</a>
+    <a href="{{url_for('contact')}}">Contact Us</a>
+</nav>
+
+{% if data %}
+    
+        {% for item in data %}
+        <section>
+            <div class="float-container2">
+                <div id="float-child2">
+                    {% for key, value in stripe_product_images.items() %}
+                        {% if key == item.productID %}
+                            <img src="{{value}}" , width="125", height="125">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="float-child2">
+                    <p>
+                    <!-- <b>ItemId:</b> {{item.productID}}<br> -->
+                    <b>Item Name: </b>{{ item.itemName }}<br>
+                    <b>Description:</b> {{ item.itemDesc }}<br>
+                    <b>Price:</b> ${{ item.price }}<br>
+                    {% for cart_item in cart_items %}
+                        {% if cart_item.productID == item.productID %}
+                            <b>Quantity:</b> {{ cart_item.quantity }}<br>
+                        {% endif %}
+                    {% endfor %}
+                    </p>
+                </div>
+                <div class="float-child2">
+                    <form method="post">
+                        <input type="hidden" name="del" value="{{item.productID}}">
+                        <input type="submit" class="logout-btn" value="Remove Item">
+                    </form>
+                </div>
+            </div>
+        </section>
+        {% endfor %}
+    
+        <form action="/create-checkout-session" method="POST">
+            <div align="center">
+                <button type="submit" id="checkout-button">Checkout</button>
+            </div>
+        </form>
+
+{% else %}
+    <div style="text-align: center;">
+        <p>Your cart is empty.</p>
+    </div>
+{% endif %}
+    
+</body>
+</html>
