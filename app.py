@@ -1,17 +1,9 @@
-from click import password_option
-from flask import Flask, g, redirect, render_template, url_for, request, session, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LOGIN_MESSAGE, UserMixin, login_user, LoginManager, login_required, logout_user,current_user
-from sqlalchemy import ForeignKey
-from flask_bcrypt import Bcrypt
-from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment#, category
-from urllib.parse import quote_plus, urlencode
+from flask import Flask, redirect, render_template, url_for, request
+from flask_login import login_user, LoginManager, login_required, logout_user, current_user
+from dbModels import db, user, product, review, cart, cartItems
 from dotenv import load_dotenv
-#from oauthlib.oauth2 import WebApplicationClient
-import os, json, requests
-import stripe
 from sqlalchemy.orm import joinedload
-import validators
+import os, stripe, validators
 
 # Load environment variables from .env file
 load_dotenv()
