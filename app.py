@@ -468,23 +468,30 @@ def cart_page():
     productIDs = []
     for item in cart_items: productIDs.append(item.productID)
     cart_products = product.query.filter(product.productID.in_(productIDs)).all()
+
+    if request.method == "POST":
+        # if the request is post at this point
+        item_num = int(request.form.get("del") )
+        # print(item_num)
+        deleteEntry = cartItems.query.filter_by(cartID=cart_.cartID).filter_by(productID=item_num).one()
+        # print(deleteEntry.cartID)
+        db.session.delete(deleteEntry)
+        db.session.commit()
+
+        cart_ = cart.query.filter_by(userID=current_user.userID).one()
+        cart_items = cartItems.query.filter_by(cartID=cart_.cartID).all()
+    
+        productIDs = []
+        for item in cart_items: productIDs.append(item.productID)
+        cart_products = product.query.filter(product.productID.in_(productIDs)).all()
+        
+        return render_template('cart.html', data=cart_products)
     # print(cart_products)
     return render_template('cart.html', data=cart_products)
 
 @app.route("/contact_us")
 def contact():
     return render_template('contact.html')
-
-@app.route('/removeItem', methods = ['GET', 'POST'])
-@login_required
-def removeItem():
-    item_num = ""
-    if request.method == "POST":
-        # if the request is post at this point
-        item_num = request.form.get("del")
-    print(item_num)
-    # return render_template('cart.html')
-
 
 if __name__ == '__main__': 
     app.run(debug=True)

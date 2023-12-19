@@ -37,7 +37,7 @@
         <div class="float-container2">
             <div class="float-child2">
                 <p>
-                <b>ItemId:</b> {{item.productID}}<br>
+                <!-- <b>ItemId:</b> {{item.productID}}<br> -->
                 <b>Item Name: </b>{{ item.itemName }}<br>
                 <b>Description:</b> {{ item.itemDesc }}<br>
                 <b>Price:</b> ${{ item.price }}<br>
@@ -46,20 +46,14 @@
             </div>
             <div class="float-child2">
                 <form method="post">
-                        <select name="del" id="del">
-                            <option value="K-Nearest Neighbors">K-Nearest Neighbors</option>
-                            <option value="K-Means Clustering">K-Means Clustering</option>
-                        </select>
-                
+                    <input type="hidden" name="del" value="{{item.productID}}">
                     <input type="submit" class="logout-btn" value="Remove Item">
                 </form>
-                <!-- <form name="del" id="del" action="{{url_for('removeItem')}}" method="post">
-                    <button id="del" value={{item.productID}} class="logout-btn" type="submit">Remove Item</button>
-                </form> -->
             </div>
         </div>
     </section>
         {% endfor %}
+    
         
     
 
