@@ -52,22 +52,22 @@ class review(db.Model, UserMixin):
 #     name = db.Column(db.String(100), nullable=False)
 #     desc = db.Column(db.String(300))
 
-class order(db.Model, UserMixin):
-    __tablename__ = 'order'
+# class order(db.Model, UserMixin):
+#     __tablename__ = 'order'
 
-    orderID = db.Column(db.Integer, primary_key=True, nullable=False)
-    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
-    orderDate = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
-    status = db.Column(db.String(15))
-    totalAmount = db.Column(db.Float(5,0))
+#     orderID = db.Column(db.Integer, primary_key=True, nullable=False)
+#     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+#     orderDate = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
+#     status = db.Column(db.String(15))
+#     totalAmount = db.Column(db.Float(5,0))
 
-class orderItem(db.Model, UserMixin):
-    __tablename__ = 'orderItem'
+# class orderItem(db.Model, UserMixin):
+#     __tablename__ = 'orderItem'
 
-    orderItemID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    orderID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
-    productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False, default=1)
+#     orderItemID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     orderID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
+#     productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False)
+#     quantity = db.Column(db.Integer, nullable=False, default=1)
 
 class cart(db.Model, UserMixin):
     __tablename__ = 'cart'
@@ -83,11 +83,11 @@ class cartItems(db.Model, UserMixin):
     productID = db.Column(db.Integer, db.ForeignKey('product.productID'), nullable=False, unique=True)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
-class payment(db.Model, UserMixin):
-    __tablename__ = 'payment'
+# class payment(db.Model, UserMixin):
+#     __tablename__ = 'payment'
     
-    transactionID = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    orderID = db.Column(db.Integer, db.ForeignKey('order.orderID'), nullable=False)
-    paymentMethod = db.Column(db.String(100), nullable=False)
-    amount = db.Column(db.Float(5,0), nullable=False)
-    status = db.Column(db.String(100), nullable=False)
+#     transactionID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+#     orderID = db.Column(db.Integer, db.ForeignKey('order.orderID'), nullable=False)
+#     paymentMethod = db.Column(db.String(100), nullable=False)
+#     amount = db.Column(db.Float(5,0), nullable=False)
+#     status = db.Column(db.String(100), nullable=False)
