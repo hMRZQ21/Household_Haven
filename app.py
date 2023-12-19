@@ -73,15 +73,15 @@ except Exception as e:
 def index():
     return render_template('home.html', current_user=current_user)
 
-@app.route('/home', methods = ['GET', 'POST'])
-# stop displaying tables
-def home():
-    with app.app_context():
-        data = user.query.all()
-        columns = user.__table__.columns.keys()
+# @app.route('/home', methods = ['GET', 'POST'])
+# # stop displaying tables
+# def home():
+#     with app.app_context():
+#         data = user.query.all()
+#         columns = user.__table__.columns.keys()
     
-    return render_template('index.html', data=data,columns=columns,current_user=current_user)
-# session=session.get('user'), pretty=json.dumps(session.get('user'), indent=4), -- insert into render above
+#     return render_template('index.html', data=data,columns=columns,current_user=current_user)
+# # session=session.get('user'), pretty=json.dumps(session.get('user'), indent=4), -- insert into render above
 
 @app.route('/register', methods = ['GET','POST'])
 def register():
