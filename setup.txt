@@ -2,32 +2,38 @@ Instructions to get started:
 
 We will be using python 3.11.7
 
-0. create .env file with the following variables:
-    DB_USERNAME=
-    DB_PASSWORD=
-    DB_HOST=
-    DB_NAME=
-    STRIPE_PUBLISHABLE_KEY=
-    STRIPE_SECRET_KEY=
+0. Install postgresql with pgAdmin4, and set up a database
 
-1. install virtualenv
+1. Copy and past the init_db.sql file into a pgAdmin query and use it to create the needed tables in your database
+
+2. create .env file in this directory with the following variables:
+    DB_USERNAME= (put your postgres username here)
+    DB_PASSWORD= (put your postgres server specific password here)
+    DB_HOST= (put your host name, found in pgAdmin4 as well, here)
+    DB_NAME= (put your database name here)
+
+    You will need to make a Stripe account to get the following keys
+    STRIPE_PUBLISHABLE_KEY= (copy and past the Stripe publishable test key here)
+    STRIPE_SECRET_KEY= (copy and past the Stripe secret test key here)
+
+3. install virtualenv
     pip3 install virtualenv
 
-2. create virtualenv in the working directory:
+4. create virtualenv in the working directory:
     "python3 -m venv HHH"
 
-2. Activate virtual env:
+5. Activate virtual env:
     Windows: "HHH\Scripts\activate"
     Mac: "source venv/bin/activate"
 
-3. Install required dependencies:
+6. Install required dependencies:
     "pip3 install -r ./requirements.txt"
 
-4. check environment dependencies:
+7. verify environment dependencies to double check:
     "pip list"
 
-4. Run the server
-    "python3 ./app.py" or "flask run"
+8. Run the server
+    "python3 ./app.py" or "flask run" or "python app.py"
 
-5. To deactivate the venv:
+9. To deactivate the venv:
     "deactivate"
