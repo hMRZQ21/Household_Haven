@@ -1,6 +1,6 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
+    background-color: #e5f7db;
     margin: 0;
     padding: 0;
     display: flex;
@@ -37,13 +37,13 @@ input {
 }
 
 input[type="submit"] {
-    background-color: #007bff;
+    background-color: #4CAF50;
     color: #ffffff;
     cursor: pointer;
 }
 
 input[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #3d8d40;
 }
 
 .alert {

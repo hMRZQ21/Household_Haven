@@ -33,7 +33,7 @@
 <section>
     <h2>Welcome, {{current_user.name}}!</h2>
 
-    <div class="profile-info">
+    <div class="post-item">
         <div>
             <h3>Submit a form to post an item you want to sell</h3>
             
@@ -45,7 +45,7 @@
                     <input type="text" id="item_name" name="item_name" required>
 
                     <label for="item_desc">Item Description:</label>
-                    <input type="item_desc" id="item_desc" name="item_desc" required>
+                    <textarea name = "review"></textarea>
         
                     <label for="item_price">Purchasing Price:</label>
                     <input type="item_price" id="item_price" name="item_price" required>
@@ -53,7 +53,7 @@
                     <label for="item_stock">Item Stock:</label>
                     <input type="item_stock" id="item_stock" name="item_stock" required>
 
-                <label for="category">Category</label>
+                    <label for="category">Category</label>
                     <select name="category" id="category">
                         <option value="0">Furniture</option>
                         <option value="1">Appliances</option>
@@ -63,12 +63,16 @@
                         <option value="5">Cleaning Supplies</option>
                         <option value="6">Kitchen</option>
                     </select>
-
-                    <input type="submit" value="Submit">
                 </div>     
 
+                <div>
+                    <input type="submit" name="submit_item" value="Submit">
+                </div>
+
                 <div class="alert" role="alert">
-                    {{ alert_user }}
+                    {% if alert_user %}
+                        <p style="color: red;">{{ alert_user }}</p>
+                    {% endif %}
                 </div>
         </div>
         

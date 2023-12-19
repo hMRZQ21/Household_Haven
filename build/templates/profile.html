@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile - E-Commerce</title>
+    <title>User Profile</title>
  <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
 </head>
 <body>
@@ -55,6 +55,11 @@
         <form action="{{ url_for('post_item_listing') }}" method="post">
             <button type="submit">Upload Item Listing</button>
         </form>
+    </div>
+    <div class="alert" role="alert">
+        {% if alert_user %}
+            <p style="color: red;">{{ alert_user }}</p>
+        {% endif %}
     </div>
 </section>
 

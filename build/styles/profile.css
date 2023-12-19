@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: #e5f7db;
 }
 
 
@@ -56,17 +56,56 @@ input[type="submit"][name="add_to_cart"] {
     cursor: pointer; /* Change cursor on hover */
 }
 
+input[type="submit"][name="submit_item"] {
+  background-color: #4CAF50; /* Green background color */
+  color: white; /* White text color */
+  padding: 10px 15px; /* Padding for better appearance */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+button[type="submit"] {
+  background-color: #4CAF50; /* Green background color */
+  color: white; /* White text color */
+  padding: 10px 15px; /* Padding for better appearance */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add border-radius for rounded corners */
+  cursor: pointer; /* Change cursor on hover */
+}
+
 h2 {
-    color: #333;
+  color: #333;
 }
 
 .profile-info {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .profile-info div {
-    width: 48%;
+  width: 48%;
+}
+
+.post-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.post-item div {
+  width: 100%;
+}
+
+.post-item input {
+  width: 100%;
+  box-sizing: border-box; /* This ensures that padding and border are included in the total width */
+  margin-bottom: 10px; /* Adjust the margin-bottom as needed for the desired separation */
+}
+
+.post-item select {
+  width: 100%;
+  box-sizing: border-box; /* This ensures that padding and border are included in the total width */
+  margin-bottom: 50px; /* Adjust the margin-bottom as needed for the desired separation */
 }
 
 .profile-image {
@@ -86,8 +125,18 @@ h2 {
     margin-top: 20px;
 }
 
+.login-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 20px;
+}
+
 nav {
-    background-color: #007bff;
+    background-color: #4CAF50;
     overflow: hidden;
     display: flex; /* Use flex to make items fill horizontally */
     width: 70%; /* Set the width to 70% of the viewport width */
@@ -104,7 +153,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: #0056b3;
+    background-color: #3d8d40;
     color: #ffffff;
 }
 

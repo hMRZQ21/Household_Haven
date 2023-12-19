@@ -68,7 +68,7 @@ except Exception as e:
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    return render_template('home.html', current_user=current_user)
 
 @app.route('/home', methods = ['GET', 'POST'])
 # stop displaying tables
@@ -241,7 +241,8 @@ def profile():
 def post_item_listing():
 
     if current_user.usertype == 0:
-        return redirect(url_for('profile'))
+        alert_user = "You are not a Seller account! You cannot upload items to sell them."
+        return render_template('profile.html', current_user = current_user, alert_user=alert_user)
     
     elif request.method == 'POST':
         item_name = request.form.get('item_name')
@@ -297,7 +298,7 @@ def post_item_listing():
         print("Product created in Stripe. Product ID:", stripe_product.id)
         print("Price created in Stripe. Price ID:", stripe_price.id)
 
-    return redirect(url_for('profile'))
+    return render_template('profile.html', current_user = current_user)
 
 table_names = ['user', 'product', 'review', 'cart', 'cartItems', 'order', 'orderItem', 'payment', 'category']
 @app.route('/database', methods = ['GET', 'POST'])

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile - E-Commerce</title>
+    <title>Household Haven Home</title>
  <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->  
  <script src="build/scripts/main.js"></script> 
 </head>
@@ -47,24 +47,25 @@
     <div class="mySlides fade">
       <div class="numbertext">1 / 3</div>
       <center>
-      <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" style="width:50%"></center>
-      <div class="text">Household_Haven Logo</div>
+        <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" style="width:50%"></center>
+        <div class="text">Household Haven Logo</div>
+      </center>
     </div>
   
     <div class="mySlides fade">
       <div class="numbertext">2 / 3</div>
       <center>
-      <img src="https://m.media-amazon.com/images/I/71uDsp9JBOL.__AC_SX300_SY300_QL70_FMwebp_.jpg" style="width:50%">
-    </center>
-      <div class="text">Classic Oak Chair</div>
+        <img src="https://m.media-amazon.com/images/I/71uDsp9JBOL.__AC_SX300_SY300_QL70_FMwebp_.jpg" style="width:50%">
+        <div class="text">Classic Oak Chair</div>
+      </center>
     </div>
   
     <div class="mySlides fade">
       <div class="numbertext">3 / 3</div>
       <center>
-      <img src="https://scottcassinfurniture.com/cdn/shop/products/C26FC06C-799C-4E02-A196-ED95D9E55456_2048x.jpeg?v=1626307949" style="width:75%">
-      <div class="text">Antique Mahogany Table</div>
-    </center>
+        <img src="https://scottcassinfurniture.com/cdn/shop/products/C26FC06C-799C-4E02-A196-ED95D9E55456_2048x.jpeg?v=1626307949" style="width:75%">
+        <div class="text">Antique Mahogany Table</div>
+      </center>
     </div>
   
     <!-- Next and previous buttons -->
@@ -80,7 +81,14 @@
     <span class="dot" onclick="currentSlide(3)"></span>
   </div>
 
-    <a href="{{url_for('logout')}}" class="logout-btn">Logout</a>
+  {% if current_user.is_authenticated %}
+      <h3>Current User Logged In: {{ current_user.name }}</h3>
+      <a href="{{url_for('logout')}}" class="logout-btn">Logout</a>
+  {% else %}
+      <h3>No user logged in!</h3>
+      <a href="{{ url_for('login') }}" class="login-btn">Login</a>
+      
+  {% endif %}
 </section>
 
 </body>
