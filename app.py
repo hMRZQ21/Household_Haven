@@ -33,7 +33,9 @@ app = Flask(__name__, static_folder='build', template_folder='build/templates')
 DOMAIN = 'http://127.0.0.1:5000'
 
 # Configure the database connection URI. using the environment variables
-app.config['SQLALCHEMY_DATABASE_URI'] = conn
+# app.config['SQLALCHEMY_DATABASE_URI'] = conn
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DB_URI')
+
 
 # Suppress deprecation warning
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
