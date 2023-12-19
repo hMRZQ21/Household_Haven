@@ -454,7 +454,12 @@ def contact():
 
 @app.route('/removeItem', methods = ['GET', 'POST'])
 def removeItem():
-    pass
+    item_num = ""
+    if request.method == "POST":
+        # if the request is post at this point
+        item_num = request.form.get("del")
+    print(item_num)
+    # return render_template('cart.html')
 
 
 if __name__ == '__main__': 
