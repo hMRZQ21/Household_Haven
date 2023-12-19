@@ -9,15 +9,26 @@
 <body>
 
 <header>
-    <h1>Profile</h1>
+    <div class="float-container">
+        <div class = "float-child">
+    <p>
+        <a href="{{url_for('index')}}">
+         <img src="https://github.com/hMRZQ21/Household_Haven/raw/main/build/assets/Logo.png" , width="50", height="50">
+         
+        </a>
+        
+       </p></div>
+       <h1>Profile</h1>
+    
+    </div>
 </header>
 <nav>
-    <a href="{{url_for('home')}}">Home</a>
+    <a href="{{url_for('index')}}">Home</a>
     <a href="{{url_for('profile')}}">Profile</a>
 
     <a href="{{url_for('browse')}}">Browse</a>
     <a href="{{url_for('cart_page')}}">Cart</a>
-    <a href="#">Contact Us</a>
+    <a href="{{url_for('contact')}}">Contact Us</a>
 </nav>
 <section>
     <h2>Welcome, {{current_user.name}}!</h2>

@@ -67,7 +67,7 @@ except Exception as e:
 
 @app.route('/')
 def index():
-    return 'Hello, welcome to Household Haven!'
+    return render_template('home.html')
 
 @app.route('/home', methods = ['GET', 'POST'])
 # stop displaying tables
@@ -396,6 +396,10 @@ def cart_page():
     cart_products = product.query.filter(product.productID.in_(productIDs)).all()
     # print(cart_products)
     return render_template('cart.html', data=cart_products)
+
+@app.route("/contact_us")
+def contact():
+    return render_template('contact.html')
 
 if __name__ == '__main__': 
     app.run(debug=True)
