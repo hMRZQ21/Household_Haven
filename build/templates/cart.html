@@ -48,7 +48,11 @@
                     <b>Item Name: </b>{{ item.itemName }}<br>
                     <b>Description:</b> {{ item.itemDesc }}<br>
                     <b>Price:</b> ${{ item.price }}<br>
-                    <b>Stock:</b> {{ item.stock }}<br>
+                    {% for cart_item in cart_items %}
+                        {% if cart_item.productID == item.productID %}
+                            <b>Quantity:</b> {{ cart_item.quantity }}<br>
+                        {% endif %}
+                    {% endfor %}
                     </p>
                 </div>
                 <div class="float-child2">

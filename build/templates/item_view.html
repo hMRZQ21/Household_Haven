@@ -41,13 +41,20 @@
     <br><br>
         <b>Price:</b> ${{item.price}}
     <br><br>
-        <b>Stock:</b> {{item.stock}}
+        <form action="/add_to_cart/{{item.productID}}" method="post">
+            <b>Stock:</b> 
+            <select name="quantity" id="quantity">
+                {% for i in range(1, item.stock + 1) %}
+                    <option value="{{i}}">{{ i }}</option>
+                {% endfor %}
+            </select>
+            <div align="center">
+                <input type="submit" name="add_to_cart" value="Add to Cart">
+            </div>
+        </form>
     </div>
 
     <div align="center">
-        <form action="/add_to_cart/{{item.productID}}" method="post">
-            <input type="submit" name="add_to_cart" value="Add to Cart">
-        </form>
         {% if error_message %}
             <p style="color: red;">{{ error_message }}</p>
         {% endif %}

@@ -427,11 +427,13 @@ def add_to_cart(product_ID):
     if existing_cart_item:
         error_message = 'Error: This item is already in your cart.'
         return render_template('item_view.html', image=image, item=item, reviews=reviews, error_message=error_message)
+    
+    quantity = request.form.get('quantity')
 
     create_cartitem = cartItems(cartItemID = None, 
         cartID = cart.query.filter_by(userID=current_user.userID).one().cartID,
         productID = product_ID,
-        quantity = None
+        quantity = quantity
     )
 
     db.session.add(create_cartitem)
@@ -526,25 +528,38 @@ def cart_page():
         for item in cart_items: productIDs.append(item.productID)
         cart_products = product.query.filter(product.productID.in_(productIDs)).all()
         
-        return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products)
+        return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products, cart_items=cart_items)
     # print(cart_products)
-    return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products)
+    return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products, cart_items=cart_items)
 
 @app.route('/create-checkout-session', methods=['POST'])
 @login_required
 def create_checkout_session():
+
+    cart_ = cart.query.filter_by(userID=current_user.userID).one()
+    cart_items = cartItems.query.filter_by(cartID=cart_.cartID).all()
+
+    cart_item_quantities = {}
+    for item in cart_items: cart_item_quantities[item.productID] = item.quantity
+
+    productIDs = []
+    for item in cart_items: productIDs.append(item.productID)
+
+    line_items = [
+        {
+            'price': price.id,
+            'quantity': cart_item_quantities.get(product_id, 1),
+        }
+        for product_id in productIDs
+        for price in stripe.Price.list(product=product_id, limit=1)  # Assuming each product has at least one price
+    ]
+
     try:
         checkout_session = stripe.checkout.Session.create(
-            line_items=[
-                {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'price_1OP4VeLf868Boeab5Zo0Vixb',
-                    'quantity': 1,
-                },
-            ],
+            line_items=line_items,
             mode='payment',
-            success_url=DOMAIN + '/contact_us',
-            cancel_url=DOMAIN + '/contact_us',
+            success_url=DOMAIN + '/thanks',
+            cancel_url=DOMAIN + '/cart_page',
         )
     except Exception as e:
         return str(e)
