@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart</title>
- <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+    <link rel="stylesheet" href="../../build/styles/profile.css"> <!-- Link to external CSS file -->   
+    
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const checkout_public_key = '{{checkout_public_key}}';
+        const checkout_session_id = '{{checkout_session_id}}';
+    </script>
+    <script src="{{url_for('static', filename='/build/scripts/stripe-noAjax.js')}}"></script>
+
 </head>
 <body>
 
@@ -42,6 +50,12 @@
             <br>
         {% endfor %}
     </section>
+    <!-- Checkout button form -->
+    <form action="{{ url_for('checkout') }}" method="post">
+        <div align="center">
+            <input type="submit" value="Checkout">
+        </div>
+    </form>
 
 {% else %}
     <div style="text-align: center;">

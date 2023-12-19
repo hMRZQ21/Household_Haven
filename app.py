@@ -7,7 +7,6 @@ from flask_bcrypt import Bcrypt
 from dbModels import db, user, product, review, cart, cartItems, order, orderItem, payment#, category
 from urllib.parse import quote_plus, urlencode
 from dotenv import load_dotenv
-#from oauthlib.oauth2 import WebApplicationClient
 import os, json, requests
 import stripe
 
@@ -27,10 +26,6 @@ stripe_keys={
 
 stripe.api_key = stripe_keys["secret_key"]
 
-#GOOGLE_CLIENT_ID = os.getenv('google_clientID')
-#GOOGLE_CLIENT_SECRET = os.getenv('google_client_secret')
-#GOOGLE_DISCOVERY_URL = 'https://accounts.google.com/.well-known/openid-configuration'
-
 conn = f'postgresql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}/{DB_NAME}'
 print(conn)
 
@@ -47,11 +42,6 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
-# OAuth 2 client setup
-# client = WebApplicationClient(GOOGLE_CLIENT_ID)
-# def get_google_provider_cfg():
-#     return requests.get(GOOGLE_DISCOVERY_URL).json()
 
 @login_manager.user_loader
 def load_user(userID):
@@ -134,20 +124,6 @@ def register():
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
-    # # Find out what URL to hit for Google login
-    # google_provider_cfg = get_google_provider_cfg()
-    # authorization_endpoint = google_provider_cfg["authorization_endpoint"]
-
-    # # Use library to construct the request for Google login and provide
-    # # scopes that let you retrieve user's profile from Google
-    # request_uri = client.prepare_request_uri(
-    #     authorization_endpoint,
-    #     redirect_uri=request.base_url + "/callback",
-    #     scope=["openid", "email", "profile"],
-    # )
-    # return redirect(request_uri)
-    # # valid_creds = True
-
     if current_user.is_authenticated:
         return redirect(url_for('profile'))
 
@@ -175,58 +151,6 @@ def login():
        
     # If it's a GET request, render the registration form
     return render_template('login.html')
-
-# @app.route('/login/callback')
-# def callback():
-#     # Get authorization code Google sent back to you
-#     code = request.args.get("code")
-#     # Find out what URL to hit to get tokens that allow you to ask for things on behalf of a user
-#     google_provider_cfg = get_google_provider_cfg()
-#     token_endpoint = google_provider_cfg["token_endpoint"]
-    
-#     # Prepare and send a request to get tokens! Yay tokens!
-#     token_url, headers, body = client.prepare_token_request(
-#         token_endpoint,
-#         authorization_response=request.url,
-#         redirect_url=request.base_url,
-#         code=code
-#     )
-#     token_response = requests.post(
-#         token_url,
-#         headers=headers,
-#         data=body,
-#         auth=(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET),
-#     )
-
-#     # Parse the tokens!
-#     client.parse_request_body_response(json.dumps(token_response.json()))
-
-#     userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-#     uri, headers, body = client.add_token(userinfo_endpoint)
-#     userinfo_response = requests.get(uri, headers=headers, data=body)
-
-#     # Make sure their email is verified.
-#     if userinfo_response.json().get("email_verified"):
-#         unique_id = userinfo_response.json()["sub"]
-#         users_email = userinfo_response.json()["email"]
-#         picture = userinfo_response.json()["picture"]
-#         users_name = userinfo_response.json()["given_name"]
-#     else:
-#         return "User email not available or not verified by Google.", 400
-    
-#     # Create a user in your db with the information provided by Google
-#     user = User(
-#         id_=unique_id, name=users_name, email=users_email, profile_pic=picture
-#     )
-    
-#     if not User.get(unique_id): # Doesn't exist? add to db.
-#         User.create(unique_id, users_name, users_email, picture)
-
-#     # Begin user session by logging the user in
-#     login_user(user)
-
-#     # Send user back to homepage
-#     return redirect(url_for("index"))
 
 @app.route('/profile')
 @login_required
@@ -364,9 +288,6 @@ def item_view(product_ID):
 @app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
 def add_to_cart(product_ID):
 
-    # check = cart.query.filter_by(userID=current_user.userID).one().cartID
-    # print(check)
-
     user_cart = cart.query.filter_by(userID=current_user.userID).first()
     existing_cart_item = cartItems.query.filter_by(cartID=user_cart.cartID, productID=product_ID).first()
     
@@ -394,8 +315,30 @@ def cart_page():
     productIDs = []
     for item in cart_items: productIDs.append(item.productID)
     cart_products = product.query.filter(product.productID.in_(productIDs)).all()
-    # print(cart_products)
-    return render_template('cart.html', data=cart_products)
+    
+    session = stripe.checkout.Session.create(
+        payment_method_types = ['card'],
+        line_items = [{
+            'price': '{{price_1OOoYeAkpgHIn2hPUySD744n}}', #take this from stripe's priceID for the posted item
+            'quantity': 1,
+        }], #append to this list as needed
+        mode = 'payment',
+        success_url = url_for('thanks', _external=True) + '?session_id={CHECKOUT_SESSION}',
+        cancel_url = url_for('browse', _external=True),
+    )
+    return render_template(
+        'cart.html',
+        checkout_session_id=session['id'],
+        checkout_public_key=stripe_keys['publishable_key']
+    )
+
+@app.route('/checkout')
+def checkout():
+    pass
+
+@app.route('/thanks')
+def thanks():
+    return render_template('thanks.html')
 
 @app.route("/contact_us")
 def contact():

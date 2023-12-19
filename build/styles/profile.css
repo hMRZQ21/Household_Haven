@@ -47,7 +47,7 @@ textarea {
     resize: none;
 }
 
-input[type="submit"][name="add_to_cart"] {
+input[type="submit"] {
     background-color: #4CAF50; /* Green background color */
     color: white; /* White text color */
     padding: 10px 15px; /* Padding for better appearance */
