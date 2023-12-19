@@ -251,6 +251,12 @@ def post_item_listing():
         item_stock = request.form.get('item_stock')
         category = request.form.get('category')
 
+        print(item_name, "\n")
+        print(item_desc, "\n")
+        print(item_price, "\n")
+        print(item_stock, "\n")
+        print(category, "\n")
+
         if item_price == None or item_desc == None or item_price == None or item_stock == None:
             alert_user = "Please fill out all of the fields"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
