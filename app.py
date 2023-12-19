@@ -545,6 +545,10 @@ def create_checkout_session():
     productIDs = []
     for item in cart_items: productIDs.append(item.productID)
 
+    for item in cart_items: db.session.delete(item)
+
+    db.session.commit()
+
     line_items = [
         {
             'price': price.id,
