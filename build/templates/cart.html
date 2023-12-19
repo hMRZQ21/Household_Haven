@@ -35,6 +35,13 @@
         {% for item in data %}
         <section>
         <div class="float-container2">
+            <div id="float-child2">
+                {% for key, value in stripe_product_images.items() %}
+                    {% if key == item.productID %}
+                        <img src="{{value}}" , width="125", height="125">
+                    {% endif %}
+                {% endfor %}
+            </div>
             <div class="float-child2">
                 <p>
                 <!-- <b>ItemId:</b> {{item.productID}}<br> -->

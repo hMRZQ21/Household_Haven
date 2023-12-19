@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 import os, json, requests
 import stripe
 from sqlalchemy.orm import joinedload
+import validators
 
 # Load environment variables from .env file
 load_dotenv()
@@ -249,15 +250,10 @@ def post_item_listing():
         item_desc = request.form.get('item_desc')
         item_price = request.form.get('item_price')
         item_stock = request.form.get('item_stock')
+        item_image = request.form.get('item_image')
         category = request.form.get('category')
 
-        print(item_name, "\n")
-        print(item_desc, "\n")
-        print(item_price, "\n")
-        print(item_stock, "\n")
-        print(category, "\n")
-
-        if item_price == None or item_desc == None or item_price == None or item_stock == None:
+        if item_price == None or item_desc == None or item_price == None or item_stock == None or item_image == None:
             alert_user = "Please fill out all of the fields"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
 
@@ -274,6 +270,9 @@ def post_item_listing():
             alert_user = "Item description is too long!"
             return render_template('post_item.html', current_user=current_user, alert_user=alert_user)
         
+        if not validators.url(item_image):
+            return render_template('post_item.html', current_user=current_user, alert_user="Invalid image URL")
+        
         create_product = product(productID = None, 
             sellerID=current_user.userID,
             itemName = item_name,
@@ -289,7 +288,8 @@ def post_item_listing():
         stripe_product = stripe.Product.create(
             name=create_product.itemName,
             description=create_product.itemDesc,
-            id=create_product.productID
+            id=create_product.productID,
+            images=[item_image]
             # Add more attributes as needed
         )
 
@@ -361,8 +361,17 @@ def browse():
     if request.method == "POST":
         category = int(request.form.get("category"))
         data = product.query.filter_by(category=category)
-        print(data)
-        return render_template('browse.html', data=data)
+
+        stripe_product_images = {}
+        for item in data:
+            #print(item.productID)
+            stripe_product = stripe.Product.retrieve(str(item.productID))
+            image = stripe_product.get('images', [])
+            stripe_product_images[item.productID] = image[0]
+        
+        #print(stripe_product_images, "\n")
+        #print(data) stripe_product_images=stripe_product_images
+        return render_template('browse.html', data=data, stripe_product_images=stripe_product_images)
     
     else: return render_template("browse.html")
     
@@ -370,6 +379,9 @@ def browse():
 def item_view(product_ID):
     item = product.query.filter_by(productID=product_ID).one()
     #reviews = review.query.filter_by(productID=product_ID).options(joinedload('user')).all()
+    stripe_product = stripe.Product.retrieve(str(item.productID))
+    images = stripe_product.get('images', [])
+    image = images[0]
 
     reviews = (
         review.query
@@ -379,7 +391,7 @@ def item_view(product_ID):
         .all()
     )
 
-    return render_template('item_view.html', item=item, reviews=reviews)
+    return render_template('item_view.html', image=image, item=item, reviews=reviews)
 
 @app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
 @login_required
@@ -388,10 +400,15 @@ def add_to_cart(product_ID):
     # check = cart.query.filter_by(userID=current_user.userID).one().cartID
     # print(check)
 
+    seller_user_flag = product.query.filter_by(sellerID=current_user.userID, productID=product_ID).first()
     user_cart = cart.query.filter_by(userID=current_user.userID).first()
     existing_cart_item = cartItems.query.filter_by(cartID=user_cart.cartID, productID=product_ID).first()
     
     item = product.query.filter_by(productID=product_ID).first()
+
+    stripe_product = stripe.Product.retrieve(str(item.productID))
+    images = stripe_product.get('images', [])
+    image = images[0]
 
     reviews = (
         review.query
@@ -401,9 +418,13 @@ def add_to_cart(product_ID):
         .all()
     )
 
+    if seller_user_flag:
+        error_message = 'Error: You cannot purchase your own item posting!'
+        return render_template('item_view.html', image=image, item=item, reviews=reviews, error_message=error_message)
+
     if existing_cart_item:
         error_message = 'Error: This item is already in your cart.'
-        return render_template('item_view.html', item=item, reviews=reviews, error_message=error_message)
+        return render_template('item_view.html', image=image, item=item, reviews=reviews, error_message=error_message)
 
     create_cartitem = cartItems(cartItemID = None, 
         cartID = cart.query.filter_by(userID=current_user.userID).one().cartID,
@@ -416,7 +437,7 @@ def add_to_cart(product_ID):
 
     #success_message = 'Item added to cart!'
     
-    return render_template('item_view.html', item=item, reviews=reviews)
+    return render_template('item_view.html', image=image, item=item, reviews=reviews)
 
 @app.route('/post_review/<int:product_ID>', methods = ['POST'])
 @login_required
@@ -439,17 +460,21 @@ def post_review(product_ID):
         .all()
     )
 
+    stripe_product = stripe.Product.retrieve(str(item.productID))
+    images = stripe_product.get('images', [])
+    image = images[0]
+
     if seller_user_flag:
         alert_user = 'Error: You cannot review your own item!'
-        return render_template('item_view.html', item=item, reviews=reviews, error_message=alert_user)
+        return render_template('item_view.html', image=image, item=item, reviews=reviews, error_message=alert_user)
     if existing_user_review:
         alert_user = 'Error: You have already posted a review for this item!'
-        return render_template('item_view.html', item=item, reviews=reviews, error_message=alert_user)
+        return render_template('item_view.html', image=image, item=item, reviews=reviews, error_message=alert_user)
     
     comment = request.form.get('review')
     if len(comment) > 250:
         alert_user = "Item description is too long!"
-        return render_template('item_view.html', item=item, reviews=reviews, error_message=alert_user)
+        return render_template('item_view.html', image=image, item=item, reviews=reviews, error_message=alert_user)
     
     rating = int(request.form.get('rate'))
 
@@ -464,7 +489,7 @@ def post_review(product_ID):
     db.session.add(create_review)
     db.session.commit()
     
-    return render_template('item_view.html', item=item, reviews=reviews)
+    return render_template('item_view.html', image=image, item=item, reviews=reviews)
 
 @app.route('/cart_page', methods = ['GET','POST'])
 @login_required
@@ -475,6 +500,13 @@ def cart_page():
     productIDs = []
     for item in cart_items: productIDs.append(item.productID)
     cart_products = product.query.filter(product.productID.in_(productIDs)).all()
+
+    stripe_product_images = {}
+    for item in cart_products:
+        #print(item.productID)
+        stripe_product = stripe.Product.retrieve(str(item.productID))
+        image = stripe_product.get('images', [])
+        stripe_product_images[item.productID] = image[0]
 
     if request.method == "POST":
         # if the request is post at this point
@@ -492,9 +524,9 @@ def cart_page():
         for item in cart_items: productIDs.append(item.productID)
         cart_products = product.query.filter(product.productID.in_(productIDs)).all()
         
-        return render_template('cart.html', data=cart_products)
+        return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products)
     # print(cart_products)
-    return render_template('cart.html', data=cart_products)
+    return render_template('cart.html', stripe_product_images=stripe_product_images, data=cart_products)
 
 @app.route("/contact_us")
 def contact():

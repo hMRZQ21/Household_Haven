@@ -5,19 +5,25 @@ body {
     background-color: #e5f7db;
 }
 
+#viewpage_image {
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  width: 15%; /* Set width to 80% */
+}
 
 #viewpage_button1 {
     display: inline-block;
     vertical-align: top;
     padding: 10px;
-    width: 70%; /* Set width to 80% */
+    width: 55%; /* Set width to 80% */
 }
 
 #viewpage_button2 {
     display: inline-block; /* Use display: inline-block to align with viewpage_button1 */
     width: 25%; /* Set width to 20% */
     padding-left: 10px; /* Add some left padding for separation */
-    margin: auto; /* Center the button within its available space */
+    margin-left: auto;
 }
 
 header {
@@ -34,6 +40,15 @@ section {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section.browse {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 textarea {
