@@ -551,10 +551,10 @@ def create_checkout_session():
 
     return redirect(checkout_session.url, code=303)
 
-@app.route("/success")
+@app.route("/thanks")
 @login_required
 def success():
-    return render_template('success.html')
+    return render_template('thanks.html')
 
 @app.route("/cancel")
 @login_required
