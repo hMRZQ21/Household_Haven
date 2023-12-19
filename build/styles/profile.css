@@ -124,6 +124,28 @@ nav a:hover {
     
 }  
 
+.float-container2 {
+  /* padding: 10px; */
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.float-child2 {
+  float: right;
+  /* border: 2px solid red */
+}  
+
+.float-button {
+  background-color: #d9534f;
+  /* color: #fff; */
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 20px;
+}
+
 
 /* IMAGE CAROUSEL*/
 

@@ -31,17 +31,29 @@
 </nav>
 
 {% if data %}
-    <section>
+    
         {% for item in data %}
-            <div>
+        <section>
+        <div class="float-container2">
+            <div class="float-child2">
+                <p>
+                <b>ItemId:</b> {{item.productID}}<br>
                 <b>Item Name: </b>{{ item.itemName }}<br>
                 <b>Description:</b> {{ item.itemDesc }}<br>
                 <b>Price:</b> ${{ item.price }}<br>
                 <b>Stock:</b> {{ item.stock }}<br>
+                </p>
             </div>
-            <br>
-        {% endfor %}
+            <div class="float-child2">
+                <form name="del" id="del" action="/removeItem" method="post">
+                    <button value={{item.productID}} class="logout-btn" type="submit">Remove Item</button>
+                </form>
+            </div>
+        </div>
     </section>
+        {% endfor %}
+        
+    
 
 {% else %}
     <div style="text-align: center;">

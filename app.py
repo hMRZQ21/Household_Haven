@@ -120,7 +120,7 @@ def register():
             db.session.add(create_cart)
             db.session.commit()
 
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
         
         else:
             valid_creds = False
@@ -384,7 +384,7 @@ def add_to_cart(product_ID):
     db.session.add(create_cartitem)
     db.session.commit()
     
-    return render_template('item_view.html')
+    return render_template('item_view.html', item=item)
 
 @app.route('/cart_page', methods = ['GET','POST'])
 def cart_page():
@@ -400,6 +400,11 @@ def cart_page():
 @app.route("/contact_us")
 def contact():
     return render_template('contact.html')
+
+@app.route('/removeItem', methods = ['GET', 'POST'])
+def removeItem():
+    pass
+
 
 if __name__ == '__main__': 
     app.run(debug=True)
