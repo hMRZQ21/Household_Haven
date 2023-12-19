@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 #from oauthlib.oauth2 import WebApplicationClient
 import os, json, requests
 import stripe
+from sqlalchemy.orm import joinedload
 
 # Load environment variables from .env file
 load_dotenv()
@@ -167,7 +168,7 @@ def login():
             if password == cur_user.password:
                 login_user(cur_user)
                 print("User login successful!")
-                return redirect(url_for('profile'))
+                return redirect(url_for('index'))
             else:
                 valid_creds = False
                 alert_user = "Invalid password!"
@@ -359,7 +360,17 @@ def browse():
 @app.route('/browse/<int:product_ID>', methods = ['GET'])
 def item_view(product_ID):
     item = product.query.filter_by(productID=product_ID).one()
-    return render_template('item_view.html', item=item)
+    #reviews = review.query.filter_by(productID=product_ID).options(joinedload('user')).all()
+
+    reviews = (
+        review.query
+        .filter_by(productID=product_ID)
+        .join(review.user)  # Join with the 'user' relationship
+        .options(joinedload(review.user))  # Load the 'user' relationship
+        .all()
+    )
+
+    return render_template('item_view.html', item=item, reviews=reviews)
 
 @app.route('/add_to_cart/<int:product_ID>', methods = ['POST'])
 def add_to_cart(product_ID):
@@ -382,6 +393,46 @@ def add_to_cart(product_ID):
     )
 
     db.session.add(create_cartitem)
+    db.session.commit()
+
+    #success_message = 'Item added to cart!'
+    
+    return render_template('item_view.html', item=item)
+
+@app.route('/post_review/<int:product_ID>', methods = ['POST'])
+def post_review(product_ID):
+
+    # check = cart.query.filter_by(userID=current_user.userID).one().cartID
+    # print(check)
+
+    #user_product = product.query.filter_by(sellerID=current_user.userID).one()
+    seller_user_flag = product.query.filter_by(sellerID=current_user.userID, productID=product_ID).first()
+    existing_user_review = review.query.filter_by(userID=current_user.userID, productID=product_ID).first()
+    
+    item = product.query.filter_by(productID=product_ID).first()
+    if seller_user_flag:
+        alert_user = 'Error: You cannot review your own item!'
+        return render_template('item_view.html', item=item, error_message=alert_user)
+    if existing_user_review:
+        alert_user = 'Error: You have already posted a review for this item!'
+        return render_template('item_view.html', item=item, error_message=alert_user)
+    
+    comment = request.form.get('review')
+    if len(comment) > 250:
+        alert_user = "Item description is too long!"
+        return render_template('item_view.html', item=item, error_message=alert_user)
+    
+    rating = int(request.form.get('rate'))
+
+    create_review = review(reviewID = None, 
+        userID = current_user.userID,
+        productID = product_ID,
+        date = None,
+        rating = rating,
+        comment=comment
+    )
+
+    db.session.add(create_review)
     db.session.commit()
     
     return render_template('item_view.html', item=item)

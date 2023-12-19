@@ -48,10 +48,59 @@
     <form action="/post_review/{{item.productID}}" method="post">
         <h3>Submit a Review:</h3>
 
+        <!-- This code for 5 star rating is taken from https://codepen.io/hesguru/pen/BaybqXv -->
+        <div class="rate">
+            <input type="radio" id="star5" name="rate" value="5" />
+            <label for="star5" title="1 star">5 stars</label>
+            <input type="radio" id="star4" name="rate" value="4" />
+            <label for="star4" title="2 stars">4 stars</label>
+            <input type="radio" id="star3" name="rate" value="3" />
+            <label for="star3" title="3 stars">3 stars</label>
+            <input type="radio" id="star2" name="rate" value="2" />
+            <label for="star2" title="4 stars">2 stars</label>
+            <input type="radio" id="star1" name="rate" value="1" />
+            <label for="star1" title="5 stars">1 star</label>
+        </div>
+
+        <!-- Hidden input field to store the selected star rating -->
+        <input type="hidden" id="selectedRating" name="selectedRating" value="">
+
         <textarea name = "review"></textarea>
 
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" onclick="submitReview()">
     </form>
+
+    <script>
+        function submitReview() {
+            // Get the selected star rating
+            var selectedRating = document.querySelector('input[name="rate"]:checked');
+
+            // Check if a star is selected
+            if (selectedRating) {
+                // Update the hidden input field with the selected rating
+                document.getElementById('selectedRating').value = selectedRating.value;
+
+                // Submit the form
+                document.getElementById('reviewForm').submit();
+            } else {
+                alert('Please select a star rating before submitting.');
+            }
+        }
+    </script>
+
+</section>
+
+<section>
+    <h3>Reviews for this item:</h3>
+
+    {% for review in reviews %}
+        <div>
+            <p><b>User:</b> {{ review.user.name }}</p>
+            <p><b>Rating:</b> {{ review.rating }} stars</p>
+            <p><b>Review:</b> {{ review.comment }}</p>
+        </div>
+        <hr>
+    {% endfor %}
 
 </section>
 

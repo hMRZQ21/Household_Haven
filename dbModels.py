@@ -48,6 +48,8 @@ class review(db.Model, UserMixin):
     date = db.Column(db.DateTime, nullable=False, default=datetime.datetime.utcnow())
     rating = db.Column(db.Float(2,1), nullable=False)
     comment = db.Column(db.String(250))
+    user = db.relationship('user', backref='reviews')
+
 
 # class category(db.Model):
 #     __tablename__ = 'category'
