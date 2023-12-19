@@ -44,11 +44,6 @@
 * Backend: Python, PostgreSQL, and Flask
 * API: Stripe (checkout & item images)
 
-# Are there similar applications or competitors available now? How does your idea differ? Or why is there a need for a competitor?
-* There are quite a few players in this market, some include:
-  - Wayfair, Facebook Marketplace, Etsy, Ebay, Craigslist, and Nextdoor.
-* Household Haven's primary focus on second-hand household goods provides a niche marketplace with a curated selection, setting it apart from more generalized platforms. The emphasis on second-hand goods promotes environmental sustainability and offers users a more budget-friendly option compared to buying brand-new items.
-
 # ER Diagram:
 <p align="center">
   <alt>Screenshot of ER Diagram made with LucidChart.</alt>
