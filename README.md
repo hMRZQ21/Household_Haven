@@ -9,9 +9,9 @@
 * Follow the instructions found on [Setup.txt](/setup.txt)
 
 # Team Members: 
-1. Anthony Zhu
-2. Hussam Marzooq
-3. Konrad Zielinski
+1. [Anthony Zhu](https://github.com/azhu000)
+2. [Hussam Marzooq](https://github.com/hMRZQ21)
+3. [Konrad Zielinski](https://github.com/konraziel)
 
 # What does the application do?
 * Digital marketplace platform for second-hand household goods 
@@ -43,11 +43,6 @@
 * Frontend: HTML & CSS
 * Backend: Python, PostgreSQL, and Flask
 * API: Stripe (checkout & item images)
-
-# Are there similar applications or competitors available now? How does your idea differ? Or why is there a need for a competitor?
-* There are quite a few players in this market, some include:
-  - Wayfair, Facebook Marketplace, Etsy, Ebay, Craigslist, and Nextdoor.
-* Household Haven's primary focus on second-hand household goods provides a niche marketplace with a curated selection, setting it apart from more generalized platforms. The emphasis on second-hand goods promotes environmental sustainability and offers users a more budget-friendly option compared to buying brand-new items.
 
 # ER Diagram:
 <p align="center">
